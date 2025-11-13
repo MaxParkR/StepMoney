@@ -1,0 +1,401 @@
+/**
+ * Estilos de la Página de Transacciones - Diseño Moderno
+ */
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+// Contenedor de filtros
+.filter-container {
+  padding: 16px 20px;
+  background: transparent;
+  
+  ion-segment {
+    background: white;
+    border-radius: var(--sm-radius-lg);
+    padding: 6px;
+    box-shadow: var(--sm-shadow-md);
+  }
+}
+
+// Contenedor principal de transacciones
+.transactions-container {
+  padding: 0 20px;
+}
+
+// Grupos de fechas
+.date-group {
+  margin-bottom: 28px;
+  
+  .date-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px 16px 4px;
+    
+    h3 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--sm-text-primary);
+    }
+    
+    .date-totals {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      
+      .income-badge {
+        background: linear-gradient(135deg, #81FBB8 0%, #28C76F 100%);
+        color: white;
+        padding: 6px 12px;
+        border-radius: var(--sm-radius-md);
+        font-weight: 700;
+      }
+      
+      .expense-badge {
+        background: linear-gradient(135deg, #FF6B6B 0%, #FF5252 100%);
+        color: white;
+        padding: 6px 12px;
+        border-radius: var(--sm-radius-md);
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+// Lista moderna de transacciones
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  
+  .transaction-card {
+    background: white;
+    border-radius: var(--sm-radius-lg);
+    padding: 16px 20px;
+    box-shadow: var(--sm-shadow-md);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    
+    &:hover {
+      transform: translateX(4px);
+      box-shadow: var(--sm-shadow-lg);
+    }
+    
+    .transaction-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      
+      .transaction-icon-wrapper {
+        width: 52px;
+        height: 52px;
+        border-radius: var(--sm-radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        
+        ion-icon {
+          font-size: 28px;
+        }
+      }
+      
+      .transaction-info {
+        flex: 1;
+        min-width: 0;
+        
+        h4 {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 700;
+          color: var(--sm-text-primary);
+        }
+        
+        p {
+          margin: 4px 0 0 0;
+          font-size: 13px;
+          color: var(--sm-text-secondary);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        
+        .no-description {
+          opacity: 0.6;
+        }
+      }
+      
+      .transaction-amount {
+        text-align: right;
+        flex-shrink: 0;
+        
+        p {
+          margin: 0;
+          font-size: 18px;
+          font-weight: 800;
+        }
+        
+        .amount-income {
+          color: #28C76F;
+        }
+        
+        .amount-expense {
+          color: #EB445A;
+        }
+      }
+    }
+  }
+}
+
+// Estado vacío
+.empty-state {
+  text-align: center;
+  padding: 80px 32px;
+  
+  ion-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    opacity: 0.4;
+  }
+  
+  h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--sm-text-primary);
+    margin: 20px 0 12px 0;
+  }
+  
+  p {
+    font-size: 16px;
+    margin-bottom: 28px;
+    color: var(--sm-text-secondary);
+  }
+}
+
+// ESTILOS DEL MODAL MODERNO
+.modal-content-bg {
+  --background: #F8FAFC;
+}
+
+.modal-content-modern {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// Selector de tipo de transacción moderno
+.transaction-type-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding-bottom: 8px;
+  
+  .type-option {
+    background: white;
+    border-radius: var(--sm-radius-lg);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+    box-shadow: var(--sm-shadow-md);
+    
+    &:active {
+      transform: scale(0.97);
+    }
+    
+    &.active {
+      border-color: var(--ion-color-primary);
+      box-shadow: var(--sm-shadow-lg);
+      
+      .type-icon {
+        transform: scale(1.1);
+      }
+    }
+    
+    .type-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--sm-radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      
+      ion-icon {
+        font-size: 32px;
+        color: white;
+      }
+      
+      &.income-type {
+        background: linear-gradient(135deg, #81FBB8 0%, #28C76F 100%);
+      }
+      
+      &.expense-type {
+        background: linear-gradient(135deg, #FF6B6B 0%, #FF5252 100%);
+      }
+    }
+    
+    p {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--sm-text-primary);
+    }
+  }
+}
+
+// Input de monto destacado
+.amount-input-section {
+  background: white;
+  border-radius: var(--sm-radius-xl);
+  padding: 28px;
+  box-shadow: var(--sm-shadow-lg);
+  
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--sm-text-secondary);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .amount-display {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    
+    .currency {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--sm-text-accent);
+    }
+    
+    .amount-input {
+      flex: 1;
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--sm-text-primary);
+      border: none;
+      outline: none;
+      background: transparent;
+      
+      &::placeholder {
+        color: #E2E8F0;
+      }
+      
+      // Remove spin buttons
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      
+      &[type=number] {
+        -moz-appearance: textfield;
+      }
+    }
+  }
+}
+
+// Campos del formulario modernos
+.form-field {
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--sm-text-primary);
+    margin-bottom: 12px;
+  }
+  
+  .modern-item {
+    --background: white;
+    --border-radius: var(--sm-radius-lg);
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --inner-padding-end: 8px;
+    --min-height: 56px;
+    border-radius: var(--sm-radius-lg);
+    box-shadow: var(--sm-shadow-md);
+    margin-bottom: 0;
+    
+    ion-icon {
+      color: var(--sm-text-accent);
+      font-size: 24px;
+      margin-right: 12px;
+    }
+    
+    ion-select,
+    ion-input,
+    ion-textarea {
+      --padding-start: 0;
+      font-weight: 500;
+      color: var(--sm-text-primary);
+    }
+    
+    ion-textarea {
+      margin-top: 8px;
+    }
+  }
+}
+
+// Botón de guardar
+.save-button-container {
+  margin-top: 8px;
+  padding-top: 8px;
+  
+  .save-button {
+    --background: var(--sm-gradient-card);
+    --border-radius: var(--sm-radius-lg);
+    --box-shadow: var(--sm-shadow-xl);
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    
+    &:hover {
+      --box-shadow: var(--sm-shadow-hover);
+    }
+    
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 360px) {
+  .transactions-container {
+    padding: 0 16px;
+  }
+  
+  .transaction-card {
+    padding: 14px 16px;
+    
+    .transaction-content {
+      gap: 12px;
+      
+      .transaction-icon-wrapper {
+        width: 44px;
+        height: 44px;
+        
+        ion-icon {
+          font-size: 24px;
+        }
+      }
+    }
+  }
+}

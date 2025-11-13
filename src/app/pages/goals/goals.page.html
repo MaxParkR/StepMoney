@@ -1,0 +1,430 @@
+<!--
+  Vista de Metas de Ahorro
+  Muestra las metas del usuario con su progreso
+-->
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Mis Metas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <!-- Refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Encabezado grande -->
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Mis Metas</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+  </div>
+
+  <!-- Contenido -->
+  <div *ngIf="!isLoading">
+    
+    <!-- Estadísticas Generales - Diseño Moderno -->
+    <div class="stats-section-modern">
+      <div class="stats-header">
+        <h2>Resumen de Ahorro</h2>
+        <ion-icon name="sparkles-outline"></ion-icon>
+      </div>
+      
+      <div class="total-saved-card">
+        <div class="total-saved-content">
+          <p class="label">Total Ahorrado</p>
+          <h1 class="amount">{{ formatCurrency(stats.totalSavedAmount) }}</h1>
+          <p class="target">Meta: {{ formatCurrency(stats.totalTargetAmount) }}</p>
+          <ion-progress-bar 
+            [value]="stats.overallProgress / 100" 
+            color="light"
+            class="global-progress">
+          </ion-progress-bar>
+        </div>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-card active-stat">
+          <div class="stat-icon">
+            <ion-icon name="flag"></ion-icon>
+          </div>
+          <div class="stat-info">
+            <p>Activas</p>
+            <h3>{{ stats.activeGoals }}</h3>
+          </div>
+        </div>
+        <div class="stat-card completed-stat">
+          <div class="stat-icon">
+            <ion-icon name="checkmark-circle"></ion-icon>
+          </div>
+          <div class="stat-info">
+            <p>Completadas</p>
+            <h3>{{ stats.completedGoals }}</h3>
+          </div>
+        </div>
+        <div class="stat-card progress-stat">
+          <div class="stat-icon">
+            <ion-icon name="trending-up"></ion-icon>
+          </div>
+          <div class="stat-info">
+            <p>Progreso</p>
+            <h3>{{ stats.overallProgress.toFixed(0) }}%</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtros de Vista -->
+    <div class="filter-container">
+      <ion-segment [value]="currentView" (ionChange)="onViewChange($event)">
+        <ion-segment-button value="active">
+          <ion-label>Activas ({{ activeGoals.length }})</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="completed">
+          <ion-label>Completadas ({{ completedGoals.length }})</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <!-- Lista de Metas Activas -->
+    <div *ngIf="currentView === 'active'">
+      
+      <!-- Metas Activas - Diseño Moderno -->
+      <div class="goals-list-modern">
+        <div *ngFor="let goal of activeGoals" class="goal-card-modern">
+          <div class="goal-card-header">
+            <div class="goal-icon-modern" 
+                 [style.background]="goal.color + '20'"
+                 [style.border-color]="goal.color">
+              <ion-icon 
+                [name]="goal.icon"
+                [style.color]="goal.color">
+              </ion-icon>
+            </div>
+            <div class="goal-title-section">
+              <h3>{{ goal.name }}</h3>
+              <p *ngIf="goal.description">{{ goal.description }}</p>
+            </div>
+            <ion-badge 
+              [color]="getStatusColor(getProgress(goal.id)!)" 
+              *ngIf="getProgress(goal.id)"
+              class="status-badge">
+              {{ getStatusText(getProgress(goal.id)!) }}
+            </ion-badge>
+          </div>
+
+          <div class="goal-progress-modern" *ngIf="getProgress(goal.id) as progress">
+            <div class="progress-info-row">
+              <div class="current-amount">
+                <span class="amount-label">Ahorrado</span>
+                <span class="amount-value">{{ formatCurrency(goal.currentAmount) }}</span>
+              </div>
+              <div class="progress-percentage-big">
+                <span>{{ progress.percentage }}%</span>
+              </div>
+            </div>
+            <ion-progress-bar 
+              [value]="progress.percentage / 100" 
+              [color]="getStatusColor(progress)"
+              class="modern-progress-bar">
+            </ion-progress-bar>
+            <div class="target-row">
+              <span class="target-label">Meta: {{ formatCurrency(goal.targetAmount) }}</span>
+              <span class="remaining-label">Faltan: {{ formatCurrency(progress.remaining) }}</span>
+            </div>
+          </div>
+
+          <div class="goal-details-modern" *ngIf="getProgress(goal.id) as progress">
+            <div class="detail-card" *ngIf="goal.deadline">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <div class="detail-text">
+                <span class="detail-label">Fecha Límite</span>
+                <span class="detail-value">{{ formatDate(goal.deadline) }}</span>
+                <span class="days-chip" *ngIf="progress.daysRemaining">
+                  {{ progress.daysRemaining }} días
+                </span>
+              </div>
+            </div>
+            <div class="detail-card" *ngIf="progress.dailyRequired">
+              <ion-icon name="trending-up-outline"></ion-icon>
+              <div class="detail-text">
+                <span class="detail-label">Ahorro Diario Requerido</span>
+                <span class="detail-value">{{ formatCurrency(progress.dailyRequired) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="goal-actions-modern">
+            <ion-button 
+              expand="block" 
+              (click)="openContributeModal(goal)"
+              class="contribute-button"
+              [color]="goal.currentAmount >= goal.targetAmount ? 'success' : 'primary'">
+              <ion-icon name="add-circle" slot="start"></ion-icon>
+              Agregar Ahorro
+            </ion-button>
+            <ion-button 
+              fill="clear" 
+              color="danger" 
+              (click)="deleteGoal(goal)"
+              class="delete-button">
+              <ion-icon name="trash-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado vacío (sin metas activas) -->
+      <div *ngIf="activeGoals.length === 0" class="empty-state">
+        <ion-icon name="flag-outline" size="large" color="medium"></ion-icon>
+        <h2>No tienes metas activas</h2>
+        <p class="text-muted">
+          Crea tu primera meta de ahorro y comienza a trabajar hacia tus objetivos financieros
+        </p>
+        <ion-button (click)="openAddGoalModal()">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Crear Primera Meta
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Lista de Metas Completadas -->
+    <div *ngIf="currentView === 'completed'">
+      <ion-card *ngFor="let goal of completedGoals" class="goal-card completed">
+        <ion-card-content>
+          <div class="goal-header">
+            <div class="goal-icon" [style.background-color]="goal.color">
+              <ion-icon [name]="goal.icon"></ion-icon>
+            </div>
+            <div class="goal-info">
+              <h3 class="goal-name">{{ goal.name }}</h3>
+              <p class="text-muted" *ngIf="goal.completedAt">
+                Completada el {{ formatDate(goal.completedAt) }}
+              </p>
+            </div>
+            <ion-chip color="success">
+              <ion-icon name="checkmark-circle"></ion-icon>
+              <ion-label>Completada</ion-label>
+            </ion-chip>
+          </div>
+
+          <div class="goal-completed-info">
+            <div class="completed-amount">
+              <ion-icon name="trophy" color="warning"></ion-icon>
+              <span>{{ formatCurrency(goal.currentAmount) }} ahorrados</span>
+            </div>
+          </div>
+
+          <ion-button 
+            fill="clear" 
+            size="small" 
+            color="danger" 
+            (click)="deleteGoal(goal)">
+            <ion-icon name="trash-outline" slot="start"></ion-icon>
+            Eliminar
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Estado vacío (sin metas completadas) -->
+      <div *ngIf="completedGoals.length === 0" class="empty-state">
+        <ion-icon name="trophy-outline" size="large" color="medium"></ion-icon>
+        <h2>Aún no has completado ninguna meta</h2>
+        <p class="text-muted">
+          Sigue ahorrando en tus metas activas para verlas aquí
+        </p>
+      </div>
+    </div>
+
+    <!-- Espaciado inferior -->
+    <div style="height: 80px;"></div>
+  </div>
+
+</ion-content>
+
+<!-- Botón flotante para agregar meta -->
+<ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!isLoading">
+  <ion-fab-button (click)="openAddGoalModal()">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<!-- Modal para Nueva Meta -->
+<ion-modal [isOpen]="isAddingGoal" (didDismiss)="closeAddGoalModal()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Nueva Meta de Ahorro</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeAddGoalModal()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content>
+      <div class="modal-content">
+        
+        <!-- Nombre -->
+        <ion-item>
+          <ion-label position="stacked">Nombre de la Meta *</ion-label>
+          <ion-input 
+            [(ngModel)]="newGoal.name" 
+            placeholder="Ej: Vacaciones, Laptop nueva, Fondo emergencia">
+          </ion-input>
+        </ion-item>
+
+        <!-- Descripción -->
+        <ion-item>
+          <ion-label position="stacked">Descripción (opcional)</ion-label>
+          <ion-textarea 
+            [(ngModel)]="newGoal.description" 
+            placeholder="¿Para qué es esta meta?"
+            rows="2">
+          </ion-textarea>
+        </ion-item>
+
+        <!-- Monto Objetivo -->
+        <ion-item>
+          <ion-label position="stacked">Monto Objetivo *</ion-label>
+          <ion-input 
+            type="number" 
+            [(ngModel)]="newGoal.targetAmount" 
+            placeholder="0"
+            inputmode="decimal">
+          </ion-input>
+        </ion-item>
+
+        <!-- Fecha Límite -->
+        <ion-item>
+          <ion-label position="stacked">Fecha Límite (opcional)</ion-label>
+          <ion-input 
+            type="date" 
+            [(ngModel)]="newGoal.deadline">
+          </ion-input>
+        </ion-item>
+
+        <!-- Icono -->
+        <div class="icon-selector">
+          <p class="selector-label">Selecciona un Icono:</p>
+          <div class="icon-grid">
+            <div 
+              *ngFor="let icon of availableIcons" 
+              class="icon-option"
+              [class.selected]="newGoal.icon === icon"
+              (click)="newGoal.icon = icon">
+              <ion-icon [name]="icon"></ion-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- Color -->
+        <div class="color-selector">
+          <p class="selector-label">Selecciona un Color:</p>
+          <div class="color-grid">
+            <div 
+              *ngFor="let color of availableColors" 
+              class="color-option"
+              [style.background-color]="color"
+              [class.selected]="newGoal.color === color"
+              (click)="newGoal.color = color">
+              <ion-icon name="checkmark" *ngIf="newGoal.color === color"></ion-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vista Previa -->
+        <div class="preview-card">
+          <p class="text-muted">Vista Previa:</p>
+          <div class="preview-icon" [style.background-color]="newGoal.color">
+            <ion-icon [name]="newGoal.icon"></ion-icon>
+          </div>
+        </div>
+
+        <!-- Botón de guardar -->
+        <div class="form-actions">
+          <ion-button expand="block" (click)="saveGoal()" color="primary">
+            <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+            Crear Meta
+          </ion-button>
+        </div>
+
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- Modal para Contribuir -->
+<ion-modal [isOpen]="isContributing" (didDismiss)="closeContributeModal()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Agregar Ahorro</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeContributeModal()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content *ngIf="selectedGoalForContribution">
+      <div class="modal-content">
+        
+        <!-- Información de la meta -->
+        <div class="contribution-goal-info">
+          <div class="goal-icon" [style.background-color]="selectedGoalForContribution.color">
+            <ion-icon [name]="selectedGoalForContribution.icon"></ion-icon>
+          </div>
+          <div>
+            <h3>{{ selectedGoalForContribution.name }}</h3>
+            <p class="text-muted">
+              {{ formatCurrency(selectedGoalForContribution.currentAmount) }} / 
+              {{ formatCurrency(selectedGoalForContribution.targetAmount) }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Monto a agregar -->
+        <ion-item>
+          <ion-label position="stacked">Monto a Ahorrar *</ion-label>
+          <ion-input 
+            type="number" 
+            [(ngModel)]="contributionAmount" 
+            placeholder="0"
+            inputmode="decimal"
+            autofocus>
+          </ion-input>
+        </ion-item>
+
+        <!-- Nota opcional -->
+        <ion-item>
+          <ion-label position="stacked">Nota (opcional)</ion-label>
+          <ion-textarea 
+            [(ngModel)]="contributionNote" 
+            placeholder="Ej: Ahorros del mes, Bono extra..."
+            rows="2">
+          </ion-textarea>
+        </ion-item>
+
+        <!-- Botón de guardar -->
+        <div class="form-actions">
+          <ion-button expand="block" (click)="saveContribution()" color="success">
+            <ion-icon name="wallet" slot="start"></ion-icon>
+            Guardar Ahorro
+          </ion-button>
+        </div>
+
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

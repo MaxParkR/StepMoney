@@ -1,0 +1,226 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+/* Desactivamos el modo oscuro por defecto */
+/* @import "@ionic/angular/css/palettes/dark.system.css"; */
+
+/**
+ * Estilos Globales de StepMoney
+ * Estos estilos se aplican a toda la aplicación
+ */
+
+/* Contenido de páginas con padding estándar */
+ion-content {
+  --background: var(--sm-background);
+}
+
+/* Encabezados más estilizados */
+ion-header {
+  ion-toolbar {
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    
+    ion-title {
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+  }
+}
+
+/* Cards con estilo mejorado */
+ion-card {
+  border-radius: var(--sm-radius-lg);
+  box-shadow: var(--sm-shadow-card);
+  margin: var(--sm-spacing-md);
+  border: none;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sm-shadow-hover);
+  }
+  
+  ion-card-header {
+    padding-bottom: 12px;
+  }
+  
+  ion-card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--sm-text-primary);
+  }
+  
+  ion-card-subtitle {
+    color: var(--sm-text-muted);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+}
+
+/* Listas más limpias */
+ion-list {
+  background: transparent;
+  padding: 0;
+  
+  ion-item {
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --inner-padding-end: 12px;
+    --background: white;
+    --border-radius: var(--sm-radius-md);
+    margin-bottom: 12px;
+    border-radius: var(--sm-radius-md);
+    box-shadow: var(--sm-shadow-md);
+    transition: all 0.3s ease;
+    border: none;
+    
+    &:hover {
+      transform: translateX(4px);
+      box-shadow: var(--sm-shadow-lg);
+    }
+  }
+}
+
+/* Botones flotantes (FAB) */
+ion-fab-button {
+  --box-shadow: var(--sm-shadow-xl);
+  --border-radius: var(--sm-radius-xl);
+  
+  &::part(native) {
+    border-radius: var(--sm-radius-xl);
+  }
+  
+  &:hover {
+    transform: scale(1.1);
+    transition: var(--sm-transition-fast);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Inputs más bonitos */
+ion-input,
+ion-textarea,
+ion-select {
+  --background: white;
+  --border-color: var(--sm-text-muted);
+  --border-radius: var(--sm-radius-sm);
+  --padding-start: 12px;
+  --padding-end: 12px;
+}
+
+/* Segmentos (tabs secundarios) */
+ion-segment {
+  --background: white;
+  border-radius: var(--sm-radius-md);
+  padding: 4px;
+  margin: var(--sm-spacing-md);
+  box-shadow: var(--sm-shadow-sm);
+}
+
+/* Mejora visual de botones */
+ion-button {
+  --border-radius: var(--sm-radius-md);
+  --box-shadow: var(--sm-shadow-md);
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    --box-shadow: var(--sm-shadow-lg);
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Chips más bonitos */
+ion-chip {
+  --background: var(--ion-color-light);
+  border-radius: var(--sm-radius-lg);
+}
+
+/* Modales más modernos */
+ion-modal {
+  --border-radius: var(--sm-radius-xxl) var(--sm-radius-xxl) 0 0;
+  --box-shadow: var(--sm-shadow-xl);
+  
+  ion-header {
+    ion-toolbar {
+      --background: white;
+      --color: var(--sm-text-primary);
+      --border-width: 0;
+      padding-top: 8px;
+    }
+  }
+  
+  ion-content {
+    --background: #F8FAFC;
+  }
+}
+
+/* Animaciones suaves */
+* {
+  transition: background-color var(--sm-transition-normal),
+              color var(--sm-transition-normal),
+              border-color var(--sm-transition-normal);
+}
+
+/* Scrollbar personalizado para web */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ion-color-light);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sm-text-muted);
+  border-radius: 10px;
+  
+  &:hover {
+    background: var(--sm-text-secondary);
+  }
+}

@@ -1,0 +1,223 @@
+<!--
+  Página de Configuración
+  Gestión de notificaciones, datos y preferencias
+-->
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Ajustes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+  <!-- Encabezado grande -->
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Ajustes</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Sección de Notificaciones -->
+  <div class="section-header">
+    <ion-icon name="notifications" color="primary"></ion-icon>
+    <h2>Notificaciones</h2>
+  </div>
+
+  <ion-list>
+    <!-- Activar/Desactivar Notificaciones -->
+    <ion-item>
+      <ion-icon name="notifications-outline" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <h3>Activar Notificaciones</h3>
+        <p class="text-muted">Recibe recordatorios y alertas</p>
+      </ion-label>
+      <ion-toggle 
+        [(ngModel)]="notificationSettings.enabled"
+        (ionChange)="toggleNotifications($event)">
+      </ion-toggle>
+    </ion-item>
+
+    <!-- Recordatorio Diario -->
+    <ion-item *ngIf="notificationSettings.enabled">
+      <ion-icon name="alarm-outline" slot="start" color="secondary"></ion-icon>
+      <ion-label>
+        <h3>Recordatorio Diario</h3>
+        <p class="text-muted">Te recordaremos registrar tus gastos</p>
+      </ion-label>
+      <ion-toggle 
+        [(ngModel)]="notificationSettings.dailyReminder"
+        (ionChange)="saveNotificationSettings()">
+      </ion-toggle>
+    </ion-item>
+
+    <!-- Hora del Recordatorio Diario -->
+    <ion-item *ngIf="notificationSettings.enabled && notificationSettings.dailyReminder">
+      <ion-icon name="time-outline" slot="start" color="tertiary"></ion-icon>
+      <ion-label>
+        <h3>Hora del Recordatorio</h3>
+      </ion-label>
+      <ion-datetime-button datetime="dailyTime"></ion-datetime-button>
+      
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime
+            id="dailyTime"
+            presentation="time"
+            [(ngModel)]="notificationSettings.dailyReminderTime"
+            (ionChange)="saveNotificationSettings()">
+          </ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
+
+    <!-- Alertas de Metas -->
+    <ion-item *ngIf="notificationSettings.enabled">
+      <ion-icon name="flag-outline" slot="start" color="warning"></ion-icon>
+      <ion-label>
+        <h3>Alertas de Metas</h3>
+        <p class="text-muted">Notificaciones sobre tus metas de ahorro</p>
+      </ion-label>
+      <ion-toggle 
+        [(ngModel)]="notificationSettings.goalAlerts"
+        (ionChange)="saveNotificationSettings()">
+      </ion-toggle>
+    </ion-item>
+
+    <!-- Alertas de Logros -->
+    <ion-item *ngIf="notificationSettings.enabled">
+      <ion-icon name="trophy-outline" slot="start" color="success"></ion-icon>
+      <ion-label>
+        <h3>Alertas de Logros</h3>
+        <p class="text-muted">Celebra cuando completes tus metas</p>
+      </ion-label>
+      <ion-toggle 
+        [(ngModel)]="notificationSettings.achievementAlerts"
+        (ionChange)="saveNotificationSettings()">
+      </ion-toggle>
+    </ion-item>
+
+    <!-- Reporte Semanal -->
+    <ion-item *ngIf="notificationSettings.enabled">
+      <ion-icon name="stats-chart-outline" slot="start" color="tertiary"></ion-icon>
+      <ion-label>
+        <h3>Reporte Semanal</h3>
+        <p class="text-muted">Resumen de tu semana financiera</p>
+      </ion-label>
+      <ion-toggle 
+        [(ngModel)]="notificationSettings.weeklyReport"
+        (ionChange)="saveNotificationSettings()">
+      </ion-toggle>
+    </ion-item>
+
+    <!-- Día del Reporte Semanal -->
+    <ion-item *ngIf="notificationSettings.enabled && notificationSettings.weeklyReport">
+      <ion-icon name="calendar-outline" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <h3>Día del Reporte</h3>
+      </ion-label>
+      <ion-select 
+        [(ngModel)]="notificationSettings.weeklyReportDay"
+        (ionChange)="saveNotificationSettings()">
+        <ion-select-option *ngFor="let day of weekDays" [value]="day.value">
+          {{ day.label }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <!-- Sección de Datos -->
+  <div class="section-header">
+    <ion-icon name="server" color="primary"></ion-icon>
+    <h2>Gestión de Datos</h2>
+  </div>
+
+  <ion-list>
+    <!-- Estadísticas -->
+    <ion-item>
+      <ion-icon name="stats-chart-outline" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <h3>Estadísticas de Uso</h3>
+        <p class="text-muted">
+          {{ stats.totalTransactions }} transacciones • 
+          {{ stats.totalGoals }} metas
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <!-- Almacenamiento Usado -->
+    <ion-item>
+      <ion-icon name="save-outline" slot="start" color="secondary"></ion-icon>
+      <ion-label>
+        <h3>Almacenamiento Usado</h3>
+        <p class="text-muted">{{ storageUsed }}</p>
+      </ion-label>
+    </ion-item>
+
+    <!-- Exportar Datos -->
+    <ion-item button (click)="exportData()">
+      <ion-icon name="download-outline" slot="start" color="success"></ion-icon>
+      <ion-label>
+        <h3>Exportar Datos</h3>
+        <p class="text-muted">Descarga un respaldo en formato JSON</p>
+      </ion-label>
+    </ion-item>
+
+    <!-- Importar Datos -->
+    <ion-item button (click)="importData()">
+      <ion-icon name="cloud-upload-outline" slot="start" color="tertiary"></ion-icon>
+      <ion-label>
+        <h3>Importar Datos</h3>
+        <p class="text-muted">Restaura un respaldo anterior</p>
+      </ion-label>
+    </ion-item>
+
+    <!-- Limpiar Datos -->
+    <ion-item button (click)="clearAllData()">
+      <ion-icon name="trash-outline" slot="start" color="danger"></ion-icon>
+      <ion-label>
+        <h3>Limpiar Todos los Datos</h3>
+        <p class="text-muted">Elimina todas las transacciones y metas</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Sección de Información -->
+  <div class="section-header">
+    <ion-icon name="information-circle" color="primary"></ion-icon>
+    <h2>Información</h2>
+  </div>
+
+  <ion-list>
+    <!-- Acerca de -->
+    <ion-item button (click)="showAbout()">
+      <ion-icon name="information-circle-outline" slot="start" color="primary"></ion-icon>
+      <ion-label>
+        <h3>Acerca de StepMoney</h3>
+        <p class="text-muted">Versión {{ appVersion }}</p>
+      </ion-label>
+    </ion-item>
+
+    <!-- Ayuda -->
+    <ion-item href="https://ionicframework.com/docs" target="_blank">
+      <ion-icon name="help-circle-outline" slot="start" color="secondary"></ion-icon>
+      <ion-label>
+        <h3>Ayuda y Soporte</h3>
+        <p class="text-muted">Documentación y guías</p>
+      </ion-label>
+    </ion-item>
+
+    <!-- Calificar App -->
+    <ion-item button>
+      <ion-icon name="star-outline" slot="start" color="warning"></ion-icon>
+      <ion-label>
+        <h3>Calificar la App</h3>
+        <p class="text-muted">¿Te gusta StepMoney? ¡Califícanos!</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Espaciado inferior -->
+  <div style="height: 80px;"></div>
+
+</ion-content>

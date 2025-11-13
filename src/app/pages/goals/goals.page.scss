@@ -1,0 +1,486 @@
+/**
+ * Estilos de la Página de Metas de Ahorro - Diseño Moderno
+ */
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+// SECCIÓN DE ESTADÍSTICAS MODERNA
+.stats-section-modern {
+  padding: 20px;
+  
+  .stats-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--sm-text-primary);
+    }
+    
+    ion-icon {
+      font-size: 32px;
+      color: var(--sm-text-accent);
+    }
+  }
+  
+  .total-saved-card {
+    background: var(--sm-gradient-card);
+    border-radius: var(--sm-radius-xl);
+    padding: 32px 28px;
+    margin-bottom: 20px;
+    box-shadow: var(--sm-shadow-xl);
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+    }
+    
+    .total-saved-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: white;
+      
+      .label {
+        margin: 0 0 12px 0;
+        font-size: 14px;
+        font-weight: 600;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      .amount {
+        margin: 0;
+        font-size: 48px;
+        font-weight: 900;
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+      
+      .target {
+        margin: 12px 0 20px 0;
+        font-size: 14px;
+        opacity: 0.9;
+        font-weight: 500;
+      }
+      
+      .global-progress {
+        height: 10px;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.2);
+        
+        &::part(progress) {
+          background: white;
+        }
+      }
+    }
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    
+    .stat-card {
+      background: white;
+      border-radius: var(--sm-radius-lg);
+      padding: 16px 12px;
+      box-shadow: var(--sm-shadow-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--sm-shadow-lg);
+      }
+      
+      .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--sm-radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        ion-icon {
+          font-size: 28px;
+          color: white;
+        }
+      }
+      
+      &.active-stat .stat-icon {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      }
+      
+      &.completed-stat .stat-icon {
+        background: linear-gradient(135deg, #81FBB8 0%, #28C76F 100%);
+      }
+      
+      &.progress-stat .stat-icon {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      }
+      
+      .stat-info {
+        text-align: center;
+        
+        p {
+          margin: 0;
+          font-size: 12px;
+          color: var(--sm-text-secondary);
+          font-weight: 500;
+        }
+        
+        h3 {
+          margin: 4px 0 0 0;
+          font-size: 20px;
+          font-weight: 800;
+          color: var(--sm-text-primary);
+        }
+      }
+    }
+  }
+}
+
+// Filtros
+.filter-container {
+  padding: 16px 20px;
+  background: transparent;
+  
+  ion-segment {
+    background: white;
+    border-radius: var(--sm-radius-lg);
+    padding: 6px;
+    box-shadow: var(--sm-shadow-md);
+  }
+}
+
+// LISTA DE METAS MODERNA
+.goals-list-modern {
+  padding: 0 20px 80px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.goal-card-modern {
+  background: white;
+  border-radius: var(--sm-radius-xl);
+  padding: 24px;
+  box-shadow: var(--sm-shadow-card);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sm-shadow-hover);
+  }
+  
+  .goal-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    
+    .goal-icon-modern {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--sm-radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 3px solid;
+      
+      ion-icon {
+        font-size: 32px;
+      }
+    }
+    
+    .goal-title-section {
+      flex: 1;
+      min-width: 0;
+      
+      h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--sm-text-primary);
+      }
+      
+      p {
+        margin: 6px 0 0 0;
+        font-size: 14px;
+        color: var(--sm-text-secondary);
+        line-height: 1.4;
+      }
+    }
+    
+    .status-badge {
+      flex-shrink: 0;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: var(--sm-radius-md);
+    }
+  }
+  
+  .goal-progress-modern {
+    margin-bottom: 20px;
+    
+    .progress-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 12px;
+      
+      .current-amount {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        
+        .amount-label {
+          font-size: 12px;
+          color: var(--sm-text-secondary);
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .amount-value {
+          font-size: 24px;
+          font-weight: 900;
+          color: var(--sm-text-primary);
+        }
+      }
+      
+      .progress-percentage-big {
+        span {
+          font-size: 32px;
+          font-weight: 900;
+          background: var(--sm-gradient-card);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+      }
+    }
+    
+    .modern-progress-bar {
+      height: 14px;
+      border-radius: 7px;
+      margin: 12px 0;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .target-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      
+      .target-label {
+        color: var(--sm-text-secondary);
+      }
+      
+      .remaining-label {
+        color: var(--sm-text-accent);
+      }
+    }
+  }
+  
+  .goal-details-modern {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+    
+    .detail-card {
+      background: var(--ion-color-light);
+      border-radius: var(--sm-radius-md);
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      
+      ion-icon {
+        font-size: 24px;
+        color: var(--sm-text-accent);
+        flex-shrink: 0;
+      }
+      
+      .detail-text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+        min-width: 0;
+        
+        .detail-label {
+          font-size: 11px;
+          color: var(--sm-text-secondary);
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.3px;
+        }
+        
+        .detail-value {
+          font-size: 14px;
+          color: var(--sm-text-primary);
+          font-weight: 700;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        
+        .days-chip {
+          display: inline-block;
+          background: var(--sm-text-accent);
+          color: white;
+          padding: 4px 8px;
+          border-radius: var(--sm-radius-sm);
+          font-size: 11px;
+          font-weight: 700;
+          margin-top: 4px;
+          width: fit-content;
+        }
+      }
+    }
+  }
+  
+  .goal-actions-modern {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    
+    .contribute-button {
+      flex: 1;
+      --border-radius: var(--sm-radius-lg);
+      --box-shadow: var(--sm-shadow-md);
+      --padding-top: 14px;
+      --padding-bottom: 14px;
+      font-weight: 700;
+      
+      &:hover {
+        --box-shadow: var(--sm-shadow-lg);
+      }
+    }
+    
+    .delete-button {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      --border-radius: var(--sm-radius-md);
+      
+      ion-icon {
+        font-size: 24px;
+      }
+    }
+  }
+}
+
+// Estado vacío
+.empty-state {
+  text-align: center;
+  padding: 80px 32px;
+  
+  ion-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    opacity: 0.4;
+  }
+  
+  h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--sm-text-primary);
+    margin: 20px 0 12px 0;
+  }
+  
+  p {
+    font-size: 16px;
+    margin-bottom: 28px;
+    color: var(--sm-text-secondary);
+    line-height: 1.6;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .stats-grid {
+    gap: 10px;
+    
+    .stat-card {
+      padding: 12px 8px;
+      
+      .stat-icon {
+        width: 40px;
+        height: 40px;
+        
+        ion-icon {
+          font-size: 24px;
+        }
+      }
+      
+      .stat-info {
+        p {
+          font-size: 11px;
+        }
+        
+        h3 {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+  
+  .goal-details-modern {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 360px) {
+  .total-saved-card {
+    padding: 24px 20px;
+    
+    .amount {
+      font-size: 40px !important;
+    }
+  }
+  
+  .goal-card-modern {
+    padding: 20px;
+    
+    .goal-icon-modern {
+      width: 56px;
+      height: 56px;
+      
+      ion-icon {
+        font-size: 28px;
+      }
+    }
+  }
+}
+
+// Estilos adicionales para metas completadas
+.goal-card-modern.completed {
+  border: 2px solid var(--ion-color-success);
+  background: linear-gradient(to bottom, white 0%, #f0fdf4 100%);
+}

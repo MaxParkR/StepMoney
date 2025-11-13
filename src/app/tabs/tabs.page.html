@@ -1,0 +1,47 @@
+<!--
+  Página de Tabs - Navegación Principal
+  
+  Este es el contenedor principal de la aplicación.
+  Los tabs aparecen en la parte inferior y permiten navegar entre las páginas principales.
+  
+  <ion-tabs>: Componente que crea la estructura de tabs
+  <ion-tab-bar>: Barra de navegación en la parte inferior
+  <ion-tab-button>: Cada botón individual (con icono y texto)
+-->
+
+<ion-tabs>
+  <!-- Esta es el área donde se cargan las páginas -->
+  <ion-tab-bar slot="bottom" color="light">
+    
+    <!-- Tab 1: Dashboard / Inicio -->
+    <ion-tab-button tab="dashboard">
+      <ion-icon name="home"></ion-icon>
+      <ion-label>Inicio</ion-label>
+    </ion-tab-button>
+
+    <!-- Tab 2: Transacciones -->
+    <ion-tab-button tab="transactions">
+      <ion-icon name="swap-horizontal"></ion-icon>
+      <ion-label>Movimientos</ion-label>
+    </ion-tab-button>
+
+    <!-- Tab 3: Metas de Ahorro -->
+    <ion-tab-button tab="goals">
+      <ion-icon name="flag"></ion-icon>
+      <ion-label>Metas</ion-label>
+    </ion-tab-button>
+
+    <!-- Tab 4: Consejos Financieros -->
+    <ion-tab-button tab="tips">
+      <ion-icon name="bulb"></ion-icon>
+      <ion-label>Consejos</ion-label>
+    </ion-tab-button>
+
+    <!-- Tab 5: Configuración -->
+    <ion-tab-button tab="settings">
+      <ion-icon name="settings"></ion-icon>
+      <ion-label>Ajustes</ion-label>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+</ion-tabs>

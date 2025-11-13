@@ -1,0 +1,187 @@
+/**
+ * Estilos de la Página de Reportes
+ */
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  
+  p {
+    margin-top: 16px;
+    font-size: 14px;
+  }
+}
+
+// Selector de vista
+.view-selector {
+  padding: 16px;
+  background: transparent;
+}
+
+// Contenedor de gráficos
+.charts-container {
+  padding: 8px;
+  
+  ion-card {
+    margin: 12px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    
+    .chart-wrapper {
+      position: relative;
+      height: 300px;
+      padding: 16px 8px;
+      
+      canvas {
+        max-height: 100%;
+      }
+    }
+  }
+}
+
+// Contenedor de resumen
+.summary-container {
+  padding: 8px;
+  
+  .summary-card {
+    margin: 12px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    
+    ion-card-header {
+      ion-card-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        
+        ion-icon {
+          font-size: 24px;
+        }
+      }
+    }
+    
+    ion-card-content {
+      padding-top: 8px;
+      
+      ion-list {
+        background: transparent;
+        padding: 0;
+        
+        ion-item {
+          --background: transparent;
+          --padding-start: 0;
+          --inner-padding-end: 0;
+          margin-bottom: 12px;
+          
+          ion-icon {
+            font-size: 28px;
+            margin-right: 16px;
+          }
+          
+          ion-label {
+            p {
+              margin: 0 0 4px 0;
+              font-size: 13px;
+            }
+            
+            h2, h3 {
+              margin: 0;
+              font-weight: 700;
+              font-size: 20px;
+              color: var(--sm-text-primary);
+            }
+            
+            h3 {
+              font-size: 18px;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .top-category {
+    text-align: center;
+    padding: 20px;
+    
+    h2 {
+      margin: 0 0 12px 0;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--ion-color-warning);
+    }
+    
+    .category-amount {
+      margin: 8px 0;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--sm-text-primary);
+    }
+    
+    .category-percentage {
+      margin: 8px 0 0 0;
+      font-size: 16px;
+    }
+  }
+  
+  .download-button {
+    padding: 0 12px 24px 12px;
+  }
+}
+
+// Estado vacío
+.empty-state {
+  text-align: center;
+  padding: 80px 32px;
+  
+  ion-icon {
+    font-size: 80px;
+    margin-bottom: 16px;
+    opacity: 0.4;
+  }
+  
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--sm-text-primary);
+    margin: 16px 0 8px 0;
+  }
+  
+  p {
+    font-size: 16px;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+}
+
+// Responsive
+@media (min-width: 768px) {
+  .charts-container ion-card,
+  .summary-container .summary-card {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .view-selector {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .charts-container .chart-wrapper {
+    height: 400px;
+  }
+}
+
+// Estilos para los gráficos de Chart.js
+canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+

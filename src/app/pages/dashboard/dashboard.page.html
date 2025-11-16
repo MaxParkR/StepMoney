@@ -1,11 +1,8 @@
 <!--
   Vista del Dashboard - Pantalla Principal
-  
-  Esta es la interfaz visual del dashboard.
-  Muestra tarjetas con información financiera del usuario.
 -->
 
-<!-- Encabezado de la página -->
+<!-- Encabezado -->
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
@@ -17,22 +14,21 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- Contenido principal -->
+<!-- Contenido -->
 <ion-content [fullscreen]="true">
-  
-  <!-- Refresh para actualizar datos (deslizar hacia abajo) -->
+
+  <!-- Refresher -->
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Encabezado grande con efecto parallax -->
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Inicio</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <!-- Spinner de carga -->
+  <!-- Spinner -->
   <div *ngIf="isLoading" class="loading-container">
     <ion-spinner name="crescent" color="primary"></ion-spinner>
     <p class="text-muted">Cargando datos...</p>
@@ -40,8 +36,8 @@
 
   <!-- Contenido del Dashboard -->
   <div *ngIf="!isLoading">
-    
-    <!-- Tarjeta de Balance General - Diseño Moderno -->
+
+    <!-- Balance General -->
     <div class="balance-card-modern">
       <div class="balance-header-section">
         <div>
@@ -50,7 +46,7 @@
         </div>
         <ion-icon name="notifications-outline" class="notification-icon"></ion-icon>
       </div>
-      
+
       <div class="balance-card-gradient">
         <div class="balance-content">
           <div class="card-decoration">
@@ -68,7 +64,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="income-expense-row">
         <div class="stat-item income-stat">
           <div class="stat-icon-wrapper income-bg">
@@ -91,55 +87,54 @@
       </div>
     </div>
 
-    <!-- Servicios / Acciones Rápidas - Diseño Moderno -->
+    <!-- Servicios -->
     <div class="services-section">
       <h3 class="section-title">Servicios</h3>
       <div class="services-grid">
+
         <div class="service-item" (click)="goToTransactions()">
           <div class="service-icon-wrapper wallet-bg">
             <ion-icon name="wallet-outline"></ion-icon>
           </div>
           <p class="service-label">Wallet</p>
         </div>
-        
+
         <div class="service-item" (click)="goToTransactions()">
           <div class="service-icon-wrapper transfer-bg">
             <ion-icon name="swap-horizontal-outline"></ion-icon>
           </div>
           <p class="service-label">Transfer</p>
         </div>
-        
+
         <div class="service-item" [routerLink]="['/pages/reports']">
           <div class="service-icon-wrapper pay-bg">
             <ion-icon name="card-outline"></ion-icon>
           </div>
           <p class="service-label">Pay</p>
         </div>
-        
+
         <div class="service-item" (click)="goToGoals()">
           <div class="service-icon-wrapper topup-bg">
             <ion-icon name="add-circle-outline"></ion-icon>
           </div>
           <p class="service-label">Topup</p>
         </div>
+
       </div>
     </div>
 
-    <!-- Transacciones Recientes - Diseño Moderno -->
+    <!-- Transacciones Recientes -->
     <div class="recent-transactions-section" *ngIf="summary.byCategory.length > 0">
       <div class="section-header">
         <h3 class="section-title">Transacciones Recientes</h3>
         <a class="view-all-link" (click)="goToTransactions()">Ver Todo</a>
       </div>
-      
+
       <div class="transactions-list">
         <div class="transaction-item" *ngFor="let category of getTopCategories()">
           <div class="transaction-left">
             <div class="transaction-icon-wrapper" [style.background]="category.categoryColor + '20'">
-              <ion-icon 
-                [name]="category.categoryIcon" 
-                [style.color]="category.categoryColor">
-              </ion-icon>
+              <ion-icon [name]="category.categoryIcon" [style.color]="category.categoryColor"></ion-icon>
             </div>
             <div class="transaction-info">
               <h4>{{ category.categoryName }}</h4>
@@ -154,7 +149,7 @@
       </div>
     </div>
 
-    <!-- Sección de Metas de Ahorro -->
+    <!-- Metas -->
     <ion-card *ngIf="goalsProgress.length > 0">
       <ion-card-header>
         <ion-card-title>
@@ -163,27 +158,25 @@
         </ion-card-title>
         <ion-card-subtitle>{{ goalsStats.activeGoals }} metas activas</ion-card-subtitle>
       </ion-card-header>
+
       <ion-card-content>
-        <div *ngFor="let progress of goalsProgress.slice(0, 3)" class="goal-item">
+        <div *ngFor="let progress of goalsProgress.slice(0,3)" class="goal-item">
           <div class="goal-header">
             <h3 class="goal-name">{{ progress.goalName }}</h3>
             <span class="goal-percentage" [class.text-success]="progress.percentage >= 100">
               {{ progress.percentage }}%
             </span>
           </div>
-          <ion-progress-bar 
-            [value]="progress.percentage / 100" 
-            [color]="progress.percentage >= 100 ? 'success' : 'primary'">
-          </ion-progress-bar>
+          <ion-progress-bar [value]="progress.percentage / 100"
+            [color]="progress.percentage >= 100 ? 'success' : 'primary'"></ion-progress-bar>
           <div class="goal-footer">
-            <p class="text-muted">
-              Faltan {{ formatCurrency(progress.remaining) }}
-            </p>
+            <p class="text-muted">Faltan {{ formatCurrency(progress.remaining) }}</p>
             <p class="text-muted" *ngIf="progress.daysRemaining">
               {{ progress.daysRemaining }} días restantes
             </p>
           </div>
         </div>
+
         <ion-button expand="block" fill="clear" (click)="goToGoals()">
           Ver todas las metas
           <ion-icon name="arrow-forward" slot="end"></ion-icon>
@@ -191,7 +184,7 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Estadísticas Generales -->
+    <!-- Resumen General -->
     <ion-card>
       <ion-card-header>
         <ion-card-title>
@@ -199,7 +192,17 @@
           Resumen General
         </ion-card-title>
       </ion-card-header>
+
       <ion-card-content>
+
+        <!-- GRAFICO DONUT  -->
+        <div class="chart-container" *ngIf="hasData()"
+          style="height: 260px; display:flex; justify-content:center; align-items:center;">
+          <canvas id="expenseChart" #expenseCanvas width="300" height="260" style="max-width:100%;"></canvas>
+        </div>
+
+
+        <!-- Estadísticas -->
         <ion-grid>
           <ion-row>
             <ion-col size="6">
@@ -209,6 +212,7 @@
                 <p class="text-muted">Transacciones</p>
               </div>
             </ion-col>
+
             <ion-col size="6">
               <div class="stat-box">
                 <ion-icon name="flag" color="success"></ion-icon>
@@ -218,23 +222,21 @@
             </ion-col>
           </ion-row>
         </ion-grid>
+
       </ion-card-content>
     </ion-card>
 
-    <!-- Mensaje cuando no hay datos -->
+    <!-- Empty state -->
     <div *ngIf="!hasData()" class="empty-state">
       <ion-icon name="document-text-outline" size="large" color="medium"></ion-icon>
       <h2>¡Bienvenido a StepMoney!</h2>
-      <p class="text-muted">
-        Comienza registrando tu primera transacción o creando una meta de ahorro.
-      </p>
+      <p class="text-muted">Comienza registrando tu primera transacción o creando una meta de ahorro.</p>
       <ion-button expand="block" (click)="goToTransactions()">
         <ion-icon name="add-circle" slot="start"></ion-icon>
         Registrar Primera Transacción
       </ion-button>
     </div>
 
-    <!-- Espaciado inferior para que no se solape con los tabs -->
     <div style="height: 80px;"></div>
   </div>
 

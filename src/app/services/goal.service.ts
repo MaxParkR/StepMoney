@@ -179,11 +179,11 @@ export class GoalService {
   /**
    * Actualiza una meta existente
    */
-  async updateGoal(id: string, updates: UpdateGoalDTO): Promise<Goal> {
+  async updateGoal(id: string, updates: Partial<Goal>): Promise<Goal> {
     try {
       const allGoals = this.getAllGoals();
       const index = allGoals.findIndex(goal => goal.id === id);
-      
+
       if (index === -1) {
         throw new Error(`Meta con ID ${id} no encontrada`);
       }
@@ -192,7 +192,7 @@ export class GoalService {
       const updatedGoal: Goal = {
         ...existingGoal,
         ...updates,
-        id: existingGoal.id,
+        id: existingGoal.id,              // Mantén ID original
         currentAmount: existingGoal.currentAmount,
         createdAt: existingGoal.createdAt,
         updatedAt: new Date().toISOString(),
@@ -201,10 +201,10 @@ export class GoalService {
       };
 
       allGoals[index] = updatedGoal;
-      
+
       await this.saveGoals(allGoals);
       this.goalsSubject.next(allGoals);
-      
+
       console.log('✅ Meta actualizada:', updatedGoal);
       return updatedGoal;
     } catch (error) {
@@ -212,6 +212,7 @@ export class GoalService {
       throw error;
     }
   }
+
 
   /**
    * Elimina una meta

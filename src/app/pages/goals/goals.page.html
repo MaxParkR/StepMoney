@@ -173,6 +173,14 @@
             </ion-button>
             <ion-button 
               fill="clear" 
+              color="secondary"
+              (click)="openEditGoalModal(goal)"
+              class="edit-button">
+              <ion-icon name="create-outline"></ion-icon>
+              Editar Ahorro
+            </ion-button>
+            <ion-button 
+              fill="clear" 
               color="danger" 
               (click)="deleteGoal(goal)"
               class="delete-button">
@@ -222,7 +230,13 @@
               <span>{{ formatCurrency(goal.currentAmount) }} ahorrados</span>
             </div>
           </div>
-
+          <ion-button 
+            fill="clear" 
+            color="secondary" 
+            (click)="openEditGoalModal(goal)"
+            class="edit-button">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
           <ion-button 
             fill="clear" 
             size="small" 
@@ -231,6 +245,7 @@
             <ion-icon name="trash-outline" slot="start"></ion-icon>
             Eliminar
           </ion-button>
+
         </ion-card-content>
       </ion-card>
 
@@ -363,6 +378,111 @@
   </ng-template>
 </ion-modal>
 
+<!-- Modal para Editar Meta -->
+<ion-modal [isOpen]="isEditingGoal" (didDismiss)="closeEditGoalModal()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Editar Meta de Ahorro</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeEditGoalModal()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content *ngIf="editingGoal">
+      <div class="modal-content">
+        
+        <!-- Nombre -->
+        <ion-item>
+          <ion-label position="stacked">Nombre de la Meta *</ion-label>
+          <ion-input 
+            [(ngModel)]="editingGoal.name" 
+            placeholder="Ej: Vacaciones, Laptop nueva, Fondo emergencia">
+          </ion-input>
+        </ion-item>
+
+        <!-- Descripción -->
+        <ion-item>
+          <ion-label position="stacked">Descripción (opcional)</ion-label>
+          <ion-textarea 
+            [(ngModel)]="editingGoal.description" 
+            placeholder="¿Para qué es esta meta?"
+            rows="2">
+          </ion-textarea>
+        </ion-item>
+
+        <!-- Monto Objetivo -->
+        <ion-item>
+          <ion-label position="stacked">Monto Objetivo *</ion-label>
+          <ion-input 
+            type="number" 
+            [(ngModel)]="editingGoal.targetAmount" 
+            placeholder="0"
+            inputmode="decimal">
+          </ion-input>
+        </ion-item>
+
+        <!-- Fecha Límite -->
+        <ion-item>
+          <ion-label position="stacked">Fecha Límite (opcional)</ion-label>
+          <ion-input 
+            type="date" 
+            [(ngModel)]="editingGoal.deadline">
+          </ion-input>
+        </ion-item>
+
+        <!-- Icono -->
+        <div class="icon-selector">
+          <p class="selector-label">Selecciona un Icono:</p>
+          <div class="icon-grid">
+            <div 
+              *ngFor="let icon of availableIcons" 
+              class="icon-option"
+              [class.selected]="editingGoal.icon === icon"
+              (click)="editingGoal.icon = icon">
+              <ion-icon [name]="icon"></ion-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- Color -->
+        <div class="color-selector">
+          <p class="selector-label">Selecciona un Color:</p>
+          <div class="color-grid">
+            <div 
+              *ngFor="let color of availableColors" 
+              class="color-option"
+              [style.background-color]="color"
+              [class.selected]="editingGoal.color === color"
+              (click)="editingGoal.color = color">
+              <ion-icon name="checkmark" *ngIf="editingGoal.color === color"></ion-icon>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vista Previa -->
+        <div class="preview-card">
+          <p class="text-muted">Vista Previa:</p>
+          <div class="preview-icon" [style.background-color]="editingGoal.color">
+            <ion-icon [name]="editingGoal.icon"></ion-icon>
+          </div>
+        </div>
+
+        <!-- Botón de guardar -->
+        <div class="form-actions">
+          <ion-button expand="block" (click)="saveEditedGoal()" color="primary">
+            <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+            Guardar Cambios
+          </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
 <!-- Modal para Contribuir -->
 <ion-modal [isOpen]="isContributing" (didDismiss)="closeContributeModal()">
   <ng-template>
@@ -387,44 +507,4 @@
           </div>
           <div>
             <h3>{{ selectedGoalForContribution.name }}</h3>
-            <p class="text-muted">
-              {{ formatCurrency(selectedGoalForContribution.currentAmount) }} / 
-              {{ formatCurrency(selectedGoalForContribution.targetAmount) }}
-            </p>
-          </div>
-        </div>
-
-        <!-- Monto a agregar -->
-        <ion-item>
-          <ion-label position="stacked">Monto a Ahorrar *</ion-label>
-          <ion-input 
-            type="number" 
-            [(ngModel)]="contributionAmount" 
-            placeholder="0"
-            inputmode="decimal"
-            autofocus>
-          </ion-input>
-        </ion-item>
-
-        <!-- Nota opcional -->
-        <ion-item>
-          <ion-label position="stacked">Nota (opcional)</ion-label>
-          <ion-textarea 
-            [(ngModel)]="contributionNote" 
-            placeholder="Ej: Ahorros del mes, Bono extra..."
-            rows="2">
-          </ion-textarea>
-        </ion-item>
-
-        <!-- Botón de guardar -->
-        <div class="form-actions">
-          <ion-button expand="block" (click)="saveContribution()" color="success">
-            <ion-icon name="wallet" slot="start"></ion-icon>
-            Guardar Ahorro
-          </ion-button>
-        </div>
-
-      </div>
-    </ion-content>
-  </ng-template>
-</ion-modal>
+            <

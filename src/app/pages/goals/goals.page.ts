@@ -251,6 +251,80 @@ export class GoalsPage implements OnInit, OnDestroy {
     }
   }
 
+  // Estado del modal de edición
+isEditingGoal = false;
+
+  // Define el tipo para la meta que se está editando.
+  // Usa la misma estructura que la meta pero con `id` incluido
+  editingGoal: {
+    id: string;
+    name: string;
+    description?: string;
+    targetAmount: number;
+    deadline?: string;
+    icon: string;
+    color: string;
+  } | null = null;
+
+  /**
+   * Abre el modal para editar una meta
+   */
+  openEditGoalModal(goal: Goal) {
+    this.editingGoal = { 
+      id: goal.id,
+      name: goal.name,
+      description: goal.description,
+      targetAmount: goal.targetAmount,
+      deadline: goal.deadline,
+      icon: goal.icon,
+      color: goal.color
+    };
+    this.isEditingGoal = true;
+  }
+
+  /**
+   * Cierra el modal de edición
+   */
+  closeEditGoalModal() {
+    this.isEditingGoal = false;
+    this.editingGoal = null;
+  }
+
+  /**
+   * Guarda los cambios de la meta editada
+   */
+  async saveEditedGoal() {
+    if (!this.editingGoal) return;
+
+    try {
+      // Llama al servicio para actualizar la meta (asegúrate que updateGoal espera el formato correcto)
+      const updatedGoal = await this.goalService.updateGoal(this.editingGoal.id, {
+        name: this.editingGoal.name,
+        description: this.editingGoal.description,
+        targetAmount: this.editingGoal.targetAmount,
+        deadline: this.editingGoal.deadline,
+        icon: this.editingGoal.icon,
+        color: this.editingGoal.color,
+      });
+
+      // Actualiza la lista local (si tienes una) o recarga metas
+      // Por ejemplo, puedes llamar a un método para refrescar las metas:
+      // this.loadGoals();
+
+      this.isEditingGoal = false;
+      this.editingGoal = null;
+
+      // Opcional: muestra mensaje de éxito
+      console.log('Meta actualizada:', updatedGoal);
+
+    } catch (error) {
+      console.error('Error al guardar meta editada:', error);
+      // Aquí podrías mostrar un toast o alert con el error
+    }
+  }
+
+
+
   /**
    * Elimina una meta
    */

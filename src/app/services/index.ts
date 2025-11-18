@@ -12,4 +12,6 @@ export * from './transaction.service';
 export * from './goal.service';
 export * from './notification.service';
 export * from './report.service';
+export * from './profile-image.service';
+export * from './user-profile.service';
 

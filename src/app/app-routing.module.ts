@@ -21,7 +21,12 @@ const routes: Routes = [
   {
     path: 'reports',
     loadChildren: () => import('./pages/reports/reports.module').then( m => m.ReportsPageModule)
+  },
+  {
+    path: 'user-profile',
+    loadChildren: () => import('./pages/user-profile/user-profile.module').then( m => m.UserProfilePageModule)
   }
+
 ];
 
 @NgModule({

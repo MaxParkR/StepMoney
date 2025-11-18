@@ -1,0 +1,181 @@
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center">Mi Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="main-content">
+  <div class="scrollable-content">
+  <!-- Avatar Section -->
+  <div class="avatar-container">
+    <div class="avatar-wrapper">
+      <div class="avatar" [class.has-image]="hasProfileImage()">
+        <img 
+          *ngIf="hasProfileImage()" 
+          [src]="currentProfileImage" 
+          alt="Foto de perfil" 
+          class="avatar-image"
+          (click)="handleImageUpload()">
+        <span 
+          *ngIf="!hasProfileImage()" 
+          class="avatar-initial">
+          {{ getUserInitial() }}
+        </span>
+      </div>
+      <button class="camera-button" (click)="handleImageUpload()" [disabled]="isLoading">
+        <ion-icon [name]="isLoading ? 'hourglass' : 'camera'"></ion-icon>
+      </button>
+      <button 
+        *ngIf="hasProfileImage()" 
+        class="remove-button" 
+        (click)="removeProfileImage()"
+        [disabled]="isLoading">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <ion-card class="form-card">
+    <ion-card-content>
+      
+      <!-- Información Personal -->
+      <div class="section">
+        <h2 class="section-title">Información Personal</h2>
+        
+        <ion-item class="custom-item">
+          <ion-label position="stacked">Nombre Completo</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.fullName"
+            placeholder="Juan Pérez"
+            type="text">
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="custom-item">
+          <ion-label position="stacked">Username</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.username"
+            placeholder="username"
+            type="text"
+            [readonly]="isEditMode"
+            [class.readonly-input]="isEditMode">
+            <span slot="start">@</span>
+          </ion-input>
+          <ion-note *ngIf="isEditMode" slot="helper">El username no se puede cambiar</ion-note>
+        </ion-item>
+
+        <ion-item class="custom-item">
+          <ion-label position="stacked">Email</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.email"
+            placeholder="email@example.com"
+            type="email">
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="custom-item" lines="none">
+          <ion-label position="stacked">Teléfono</ion-label>
+          <div class="phone-container">
+            <select [(ngModel)]="countryCode" class="country-select">
+              <option value="+57">🇨🇴 +57</option>
+              <option value="+34">🇪🇸 +34</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+44">🇬🇧 +44</option>
+            </select>
+            <ion-input 
+              [(ngModel)]="formData.phone"
+              placeholder="300 123 4567"
+              type="tel"
+              class="phone-input">
+            </ion-input>
+          </div>
+        </ion-item>
+      </div>
+
+      <!-- Detalles -->
+      <div class="section">
+        <h2 class="section-title">Detalles</h2>
+
+        <ion-item class="custom-item">
+          <ion-label position="stacked">Fecha de Nacimiento</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.birthDate"
+            type="date">
+          </ion-input>
+        </ion-item>
+
+        <div class="gender-container">
+          <ion-label class="gender-label">Género</ion-label>
+          <ion-segment [(ngModel)]="formData.gender" mode="md">
+            <ion-segment-button value="Masculino">
+              <ion-label>Masculino</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="Femenino">
+              <ion-label>Femenino</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="Otro">
+              <ion-label>Otro</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </div>
+
+        <ion-item class="custom-item" lines="none">
+          <ion-label position="stacked">Bio ({{bioCount}}/200)</ion-label>
+          <ion-textarea 
+            [(ngModel)]="formData.bio"
+            (ionInput)="onBioChange($event)"
+            placeholder="Cuéntanos sobre ti..."
+            [maxlength]="200"
+            [rows]="3"
+            [autoGrow]="true">
+          </ion-textarea>
+        </ion-item>
+      </div>
+
+      <!-- Ubicación y Enlaces -->
+      <div class="section">
+        <h2 class="section-title">Ubicación y Enlaces</h2>
+
+        <ion-item class="custom-item">
+          <ion-label position="stacked">Ciudad</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.city"
+            placeholder="Bogotá"
+            type="text">
+            <ion-icon name="location-outline" slot="start"></ion-icon>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="custom-item" lines="none">
+          <ion-label position="stacked">Website (Opcional)</ion-label>
+          <ion-input 
+            [(ngModel)]="formData.website"
+            placeholder="https://example.com"
+            type="url">
+          </ion-input>
+        </ion-item>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
+  </div>
+
+  <!-- Floating Save Button -->
+  <div class="floating-button-container">
+    <ion-button 
+      expand="block" 
+      (click)="handleSave()"
+      class="save-button"
+      color="primary"
+      [disabled]="isLoading">
+      <ion-spinner *ngIf="isLoading" name="crescent" size="small"></ion-spinner>
+      <span *ngIf="!isLoading">{{ isEditMode ? 'Actualizar' : 'Guardar' }}</span>
+    </ion-button>
+  </div>
+</ion-content>

@@ -1,6 +1,37 @@
 /**
- * Estilos de la Página de Reportes
+ * Estilos de la Página de Reportes - Diseño Moderno
  */
+
+.reports-content {
+  --background: #F8FAFC;
+}
+
+// Header Minimalista
+.page-header {
+  padding: 24px 20px 16px 20px;
+  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  .page-title {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--sm-text-primary);
+    letter-spacing: -0.5px;
+  }
+  
+  .download-btn {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    
+    ion-icon {
+      font-size: 24px;
+      color: var(--sm-text-primary);
+    }
+  }
+}
 
 .loading-container {
   display: flex;
@@ -183,5 +214,6 @@ canvas {
   max-width: 100%;
   height: auto !important;
 }
+
 
 

@@ -1,22 +1,43 @@
 <!--
-  Página de Configuración
-  Gestión de notificaciones, datos y preferencias
+  Página Más - Hub de Opciones
+  Acceso a Perfil, Consejos, Ajustes y más
 -->
 
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Ajustes</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="more-content">
   
-  <!-- Encabezado grande -->
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Ajustes</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Header Minimalista -->
+  <div class="page-header">
+    <h1 class="page-title">Más</h1>
+  </div>
+
+  <!-- Navegación Principal -->
+  <div class="navigation-section">
+    
+    <!-- Perfil de Usuario -->
+    <div class="nav-card" (click)="goToProfile()">
+      <div class="nav-card-icon profile-gradient">
+        <ion-icon name="person"></ion-icon>
+      </div>
+      <div class="nav-card-content">
+        <h3>Mi Perfil</h3>
+        <p>Ver y editar información personal</p>
+      </div>
+      <ion-icon name="chevron-forward" class="nav-arrow"></ion-icon>
+    </div>
+
+    <!-- Consejos Financieros -->
+    <div class="nav-card" (click)="goToTips()">
+      <div class="nav-card-icon tips-gradient">
+        <ion-icon name="bulb"></ion-icon>
+      </div>
+      <div class="nav-card-content">
+        <h3>Consejos Financieros</h3>
+        <p>Tips para mejorar tus finanzas</p>
+      </div>
+      <ion-icon name="chevron-forward" class="nav-arrow"></ion-icon>
+    </div>
+
+  </div>
 
   <!-- Sección de Notificaciones -->
   <div class="section-header">

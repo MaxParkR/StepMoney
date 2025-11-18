@@ -355,6 +355,8 @@ export class GoalService {
       goalName: goal.name,
       percentage: Math.round(percentage * 10) / 10, // Redondear a 1 decimal
       remaining,
+      saved: goal.currentAmount,
+      target: goal.targetAmount,
       daysRemaining,
       dailyRequired,
       isOnTrack,

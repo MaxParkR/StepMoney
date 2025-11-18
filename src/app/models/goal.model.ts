@@ -59,6 +59,8 @@ export interface GoalProgress {
   goalName: string;
   percentage: number;           // Porcentaje completado (0-100)
   remaining: number;            // Monto restante
+  saved: number;                // Monto ya ahorrado
+  target: number;               // Monto objetivo
   daysRemaining?: number;       // Días restantes hasta deadline
   dailyRequired?: number;       // Ahorro diario requerido
   isOnTrack: boolean;           // Si va por buen camino
@@ -98,5 +100,6 @@ export const DEFAULT_GOAL_COLORS = [
   '#56C991',  // Verde suave
   '#F4A79D'   // Rosa
 ];
+
 
 

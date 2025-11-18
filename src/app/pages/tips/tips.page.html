@@ -1,22 +1,18 @@
 <!--
-  Vista de Consejos Financieros
+  Vista de Consejos Financieros - Diseño Moderno
   Biblioteca educativa con tips sobre finanzas personales
 -->
 
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Consejos</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="tips-content">
   
-  <!-- Encabezado grande -->
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Consejos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Header Minimalista con Back Button -->
+  <div class="page-header-with-back">
+    <ion-button fill="clear" class="back-button" routerLink="/tabs/settings">
+      <ion-icon name="chevron-back" slot="icon-only"></ion-icon>
+    </ion-button>
+    <h1 class="page-title">Consejos</h1>
+    <div class="spacer"></div>
+  </div>
 
   <!-- Sección de Búsqueda Moderna -->
   <div class="search-section">

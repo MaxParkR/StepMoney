@@ -1,6 +1,91 @@
 /**
- * Estilos de la Página de Configuración
+ * Estilos de la Página Más (Settings) - Diseño Moderno
  */
+
+.more-content {
+  --background: #F8FAFC;
+}
+
+// Header Minimalista
+.page-header {
+  padding: 24px 20px 16px 20px;
+  background: transparent;
+  
+  .page-title {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--sm-text-primary);
+    letter-spacing: -0.5px;
+  }
+}
+
+// Sección de Navegación Principal
+.navigation-section {
+  padding: 0 20px 24px 20px;
+}
+
+.nav-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  
+  &:active {
+    transform: scale(0.98);
+  }
+  
+  .nav-card-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    
+    ion-icon {
+      font-size: 28px;
+      color: white;
+    }
+    
+    &.profile-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    &.tips-gradient {
+      background: linear-gradient(135deg, #FFA8E2 0%, #FE90AF 100%);
+    }
+  }
+  
+  .nav-card-content {
+    flex: 1;
+    
+    h3 {
+      margin: 0 0 4px 0;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--sm-text-primary);
+    }
+    
+    p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--sm-text-secondary);
+    }
+  }
+  
+  .nav-arrow {
+    font-size: 20px;
+    color: var(--sm-text-secondary);
+  }
+}
 
 // Encabezados de sección
 .section-header {
@@ -69,5 +154,6 @@ ion-list {
     margin-right: auto;
   }
 }
+
 
 

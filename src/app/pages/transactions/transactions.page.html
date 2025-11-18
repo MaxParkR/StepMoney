@@ -1,27 +1,19 @@
 <!--
-  Vista de Transacciones
+  Vista de Transacciones - Diseño Moderno
   Muestra todas las transacciones del usuario con opción de filtrar y agregar nuevas
 -->
 
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Movimientos</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="transactions-content">
   
   <!-- Refresh -->
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Encabezado grande -->
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Movimientos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Header Minimalista -->
+  <div class="page-header">
+    <h1 class="page-title">Movimientos</h1>
+  </div>
 
   <!-- Filtros -->
   <div class="filter-container">

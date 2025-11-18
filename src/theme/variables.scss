@@ -164,8 +164,8 @@ ion-title {
 }
 
 ion-toolbar {
-  --background: var(--ion-color-primary);
-  --color: white;
+  --background: transparent;
+  --color: var(--sm-text-primary);
 }
 
 /**

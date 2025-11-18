@@ -47,15 +47,19 @@ ion-content {
   --background: var(--sm-background);
 }
 
-/* Encabezados más estilizados */
+/* Encabezados más estilizados - SIN FONDO AZUL */
 ion-header {
   ion-toolbar {
+    --background: transparent;
+    --color: var(--sm-text-primary);
     --padding-top: 8px;
     --padding-bottom: 8px;
+    --border-width: 0;
     
     ion-title {
       font-weight: 700;
       font-size: 1.25rem;
+      color: var(--sm-text-primary);
     }
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import { NotificationService } from '../../services/notification.service';
 import { TransactionService } from '../../services/transaction.service';
@@ -63,7 +64,8 @@ export class SettingsPage implements OnInit {
     private transactionService: TransactionService,
     private goalService: GoalService,
     private alertController: AlertController,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -324,5 +326,19 @@ export class SettingsPage implements OnInit {
       'Configuración del Sistema',
       'Ve a Configuración > Aplicaciones > StepMoney > Notificaciones para gestionar los permisos.'
     );
+  }
+
+  /**
+   * Navega a la página de perfil
+   */
+  goToProfile() {
+    this.router.navigate(['/tabs/user-profile']);
+  }
+
+  /**
+   * Navega a la página de consejos
+   */
+  goToTips() {
+    this.router.navigate(['/tabs/tips']);
   }
 }

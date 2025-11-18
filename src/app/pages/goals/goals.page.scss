@@ -2,6 +2,24 @@
  * Estilos de la Página de Metas de Ahorro - Diseño Moderno
  */
 
+.goals-content {
+  --background: #F8FAFC;
+}
+
+// Header Minimalista
+.page-header {
+  padding: 24px 20px 16px 20px;
+  background: transparent;
+  
+  .page-title {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--sm-text-primary);
+    letter-spacing: -0.5px;
+  }
+}
+
 .loading-container {
   display: flex;
   justify-content: center;

@@ -312,6 +312,20 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  goToReports() {
+    this.ngZone.run(() => {
+      this.router.navigate(['/tabs/reports']);
+    });
+  }
+
+  addTransaction() {
+    this.ngZone.run(() => {
+      this.router.navigate(['/tabs/transactions'], { 
+        queryParams: { action: 'add' } 
+      });
+    });
+  }
+
   async doRefresh(event: any) {
     await this.loadDashboardData();
     event.target.complete();
@@ -326,5 +340,19 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
            (this.summary.totalIncome > 0) ||
            (this.summary.totalExpense > 0) ||
            (this.goalsProgress.length > 0);
+  }
+
+  getCurrentMonthName(): string {
+    const months = [
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+    const currentDate = new Date();
+    return months[currentDate.getMonth()];
+  }
+
+  getCurrentDay(): number {
+    const currentDate = new Date();
+    return currentDate.getDate();
   }
 }

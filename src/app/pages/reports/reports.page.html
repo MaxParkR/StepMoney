@@ -1,27 +1,17 @@
 <!--
-  Página de Reportes Financieros
+  Página de Reportes Financieros - Diseño Moderno
   Muestra gráficos y resúmenes de las finanzas del usuario
 -->
 
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Reportes</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="downloadReport()">
-        <ion-icon slot="icon-only" name="download-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="reports-content">
   
-  <!-- Encabezado grande -->
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Reportes</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Header Minimalista -->
+  <div class="page-header">
+    <h1 class="page-title">Reportes</h1>
+    <ion-button fill="clear" (click)="downloadReport()" class="download-btn">
+      <ion-icon slot="icon-only" name="download-outline"></ion-icon>
+    </ion-button>
+  </div>
 
   <!-- Loading -->
   <div *ngIf="isLoading" class="loading-container">

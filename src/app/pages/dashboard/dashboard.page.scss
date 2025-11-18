@@ -1,537 +1,798 @@
 /**
- * Estilos del Dashboard - Diseño Moderno Inspirado en Mockups
- * Interfaz visual moderna con colores vibrantes y elementos redondeados
+ * Dashboard - Diseño Moderno y Minimalista
+ * Inspirado en las mejores prácticas de UI/UX
  */
 
-// Contenedor de carga
+// ==========================================
+// CONTENEDOR PRINCIPAL
+// ==========================================
+.dashboard-content {
+  --background: #F8FAFC;
+}
+
+// ==========================================
+// LOADING STATE
+// ==========================================
 .loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 50vh;
+  height: 60vh;
+  
+  ion-spinner {
+    transform: scale(1.5);
+    margin-bottom: 24px;
+  }
   
   p {
     margin-top: 16px;
-    font-size: 14px;
+    font-size: 15px;
+    color: var(--sm-text-secondary);
   }
 }
 
-// NUEVA TARJETA DE BALANCE MODERNA
-.balance-card-modern {
-  padding: 20px;
-  padding-bottom: 0;
-}
-
-.balance-header-section {
+// ==========================================
+// HEADER MINIMALISTA
+// ==========================================
+.dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 24px;
+  padding: 24px 20px 16px 20px;
+  background: transparent;
   
-  .balance-label {
+  .greeting-text {
     margin: 0;
-    font-size: 16px;
+    font-size: 14px;
     color: var(--sm-text-secondary);
     font-weight: 500;
   }
   
-  .welcome-text {
+  .page-title {
     margin: 4px 0 0 0;
     font-size: 28px;
     font-weight: 800;
     color: var(--sm-text-primary);
+    letter-spacing: -0.5px;
   }
   
   .notification-icon {
-    font-size: 28px;
-    color: var(--sm-text-secondary);
+    font-size: 26px;
+    color: var(--sm-text-primary);
     cursor: pointer;
-    transition: transform 0.3s ease;
+    padding: 8px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
     
     &:hover {
-      transform: scale(1.1);
+      background: rgba(0, 0, 0, 0.05);
+      transform: scale(1.05);
+    }
+    
+    &:active {
+      transform: scale(0.95);
     }
   }
 }
 
-.balance-card-gradient {
-  background: var(--sm-gradient-card);
-  border-radius: var(--sm-radius-xl);
-  padding: 28px;
-  box-shadow: var(--sm-shadow-xl);
+// ==========================================
+// SECCIÓN DE BALANCE
+// ==========================================
+.balance-section {
+  padding: 0 20px 24px 20px;
+}
+
+.balance-main-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24px;
+  padding: 32px 24px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.25);
+  margin-bottom: 16px;
   position: relative;
   overflow: hidden;
-  margin-bottom: 20px;
   
+  // Decoración de fondo
   &::before {
     content: '';
     position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 200px;
-    height: 200px;
-    background: rgba(255, 255, 255, 0.1);
+    top: -60px;
+    right: -60px;
+    width: 180px;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 50%;
   }
   
-  .balance-content {
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    left: -40px;
+    width: 140px;
+    height: 140px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+  }
+  
+  .balance-label {
+    margin: 0;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     position: relative;
     z-index: 1;
   }
   
-  .card-decoration {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+  .balance-amount {
+    margin: 12px 0;
+    font-size: 42px;
+    font-weight: 900;
+    color: white;
+    letter-spacing: -1px;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     
-    .card-icon {
-      font-size: 48px;
-      color: rgba(255, 255, 255, 0.2);
+    &.positive {
+      color: #ffffff;
+    }
+    
+    &.negative {
+      color: #ffe0e0;
     }
   }
   
-  .balance-label-small {
-    margin: 0;
+  .balance-subtitle {
+    margin: 8px 0 0 0;
     font-size: 14px;
     color: rgba(255, 255, 255, 0.9);
     font-weight: 500;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// ==========================================
+// TARJETAS DE INGRESOS Y GASTOS
+// ==========================================
+.income-expense-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  
+  &:active {
+    transform: scale(0.98);
   }
   
-  .balance-amount {
-    font-size: 42px;
-    font-weight: 900;
-    margin: 12px 0;
-    color: white;
-    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .balance-footer {
+  .stat-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 32px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 12px;
+  }
+  
+  .stat-icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
-    .card-number {
-      margin: 0;
-      font-size: 16px;
+    ion-icon {
+      font-size: 22px;
       color: white;
-      font-weight: 500;
-      letter-spacing: 2px;
     }
     
-    .exp-date p {
-      margin: 0;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.9);
-      font-weight: 500;
+    &.income-bg {
+      background: linear-gradient(135deg, #81FBB8 0%, #28C76F 100%);
+    }
+    
+    &.expense-bg {
+      background: linear-gradient(135deg, #FF8989 0%, #FF5252 100%);
+    }
+  }
+  
+  .trend-icon {
+    font-size: 20px;
+    
+    &.success {
+      color: #28C76F;
+    }
+    
+    &.danger {
+      color: #FF5252;
+    }
+  }
+  
+  .stat-label {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    color: var(--sm-text-secondary);
+    font-weight: 600;
+  }
+  
+  .stat-value {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--sm-text-primary);
+    letter-spacing: -0.5px;
+  }
+}
+
+// ==========================================
+// ACCIONES RÁPIDAS (SERVICIOS)
+// ==========================================
+.quick-actions-section {
+  padding: 0 20px 24px 20px;
+  
+  .section-title {
+    margin: 0 0 16px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--sm-text-primary);
+  }
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:active {
+    transform: scale(0.92);
+  }
+  
+  .action-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    
+    ion-icon {
+      font-size: 28px;
+      color: white;
+    }
+    
+    &.add-transaction-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    &.transactions-bg {
+      background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 90%, #2BFF88 100%);
+    }
+    
+    &.reports-bg {
+      background: linear-gradient(135deg, #FFB75E 0%, #ED8F03 100%);
+    }
+    
+    &.goals-bg {
+      background: linear-gradient(135deg, #FFA8E2 0%, #FE90AF 100%);
+    }
+  }
+  
+  .action-label {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sm-text-primary);
+    text-align: center;
+  }
+}
+
+// ==========================================
+// GASTOS POR CATEGORÍA
+// ==========================================
+.category-spending-section {
+  padding: 0 20px 24px 20px;
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .section-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--sm-text-primary);
+  }
+  
+  .view-all-link {
+    font-size: 13px;
+    color: #667eea;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: rgba(102, 126, 234, 0.1);
     }
   }
 }
 
-.income-expense-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  padding: 0 4px;
-  margin-bottom: 32px;
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.category-item {
+  background: white;
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
   
-  .stat-item {
-    background: white;
-    border-radius: var(--sm-radius-lg);
-    padding: 20px;
+  &:active {
+    transform: scale(0.98);
+  }
+  
+  .category-left {
     display: flex;
     align-items: center;
-    gap: 16px;
-    box-shadow: var(--sm-shadow-card);
-    transition: all 0.3s ease;
+    gap: 14px;
+    flex: 1;
     
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--sm-shadow-hover);
-    }
-    
-    .stat-icon-wrapper {
-      width: 52px;
-      height: 52px;
-      border-radius: var(--sm-radius-md);
+    .category-icon-wrapper {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
       
       ion-icon {
-        font-size: 28px;
-        color: white;
-      }
-      
-      &.income-bg {
-        background: linear-gradient(135deg, #81FBB8 0%, #28C76F 100%);
-      }
-      
-      &.expense-bg {
-        background: linear-gradient(135deg, #FF6B6B 0%, #FF5252 100%);
+        font-size: 24px;
       }
     }
     
-    .stat-content {
-      flex: 1;
+    .category-info {
+      h3 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--sm-text-primary);
+      }
       
-      .stat-label {
+      p {
+        margin: 4px 0 0 0;
+        font-size: 12px;
+        color: var(--sm-text-secondary);
+      }
+    }
+  }
+  
+  .category-right {
+    text-align: right;
+    
+    .category-amount {
+      margin: 0 0 6px 0;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--sm-text-primary);
+    }
+    
+    .progress-bar-mini {
+      width: 60px;
+      height: 4px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-left: auto;
+      
+      .progress-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+      }
+    }
+  }
+}
+
+// ==========================================
+// SECCIÓN DE GRÁFICO
+// ==========================================
+.chart-section {
+  padding: 0 20px 24px 20px;
+  
+  .section-title {
+    margin: 0 0 16px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--sm-text-primary);
+  }
+}
+
+.chart-card {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  
+  .chart-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    
+    canvas {
+      max-width: 280px;
+      max-height: 280px;
+    }
+  }
+  
+  .chart-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #E2E8F0;
+    
+    .chart-stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      .stat-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 4px;
+        
+        &.success {
+          background: #4ade80;
+        }
+        
+        &.danger {
+          background: #f87171;
+        }
+      }
+      
+      span {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--sm-text-secondary);
+      }
+    }
+  }
+}
+
+// ==========================================
+// METAS DE AHORRO
+// ==========================================
+.goals-section {
+  padding: 0 20px 24px 20px;
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .section-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--sm-text-primary);
+  }
+  
+  .view-all-link {
+    font-size: 13px;
+    color: #667eea;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: rgba(102, 126, 234, 0.1);
+    }
+  }
+}
+
+.goals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.goal-card {
+  background: white;
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  display: flex;
+  gap: 16px;
+  transition: all 0.3s ease;
+  
+  &:active {
+    transform: scale(0.98);
+  }
+  
+  .goal-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #FFA8E2 0%, #FE90AF 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    
+    ion-icon {
+      font-size: 24px;
+      color: white;
+    }
+  }
+  
+  .goal-content {
+    flex: 1;
+    
+    .goal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      
+      .goal-name {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--sm-text-primary);
+      }
+      
+      .goal-percentage {
+        font-size: 16px;
+        font-weight: 800;
+        color: #667eea;
+        
+        &.completed {
+          color: #28C76F;
+        }
+      }
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background: #E2E8F0;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        border-radius: 8px;
+        transition: width 0.5s ease;
+        
+        &.completed {
+          background: linear-gradient(90deg, #81FBB8 0%, #28C76F 100%);
+        }
+      }
+    }
+    
+    .goal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      .goal-info {
         margin: 0;
         font-size: 13px;
         color: var(--sm-text-secondary);
         font-weight: 500;
       }
       
-      .stat-value {
-        margin: 4px 0 0 0;
-        font-size: 18px;
-        font-weight: 800;
-        color: var(--sm-text-primary);
+      .goal-remaining {
+        margin: 0;
+        font-size: 12px;
+        color: var(--sm-text-secondary);
       }
     }
   }
 }
 
-// SECCIÓN DE SERVICIOS MODERNA
-.services-section {
-  padding: 0 20px;
-  margin-bottom: 32px;
+// ==========================================
+// ESTADÍSTICAS RÁPIDAS
+// ==========================================
+.quick-stats-section {
+  padding: 0 20px 24px 20px;
   
   .section-title {
-    margin: 0 0 20px 0;
+    margin: 0 0 16px 0;
     font-size: 20px;
     font-weight: 700;
     color: var(--sm-text-primary);
   }
-  
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    
-    .service-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      
-      &:active {
-        transform: scale(0.95);
-      }
-      
-      .service-icon-wrapper {
-        width: 64px;
-        height: 64px;
-        border-radius: var(--sm-radius-lg);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: var(--sm-shadow-md);
-        transition: all 0.3s ease;
-        
-        ion-icon {
-          font-size: 32px;
-          color: white;
-        }
-        
-        &.wallet-bg {
-          background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        }
-        
-        &.transfer-bg {
-          background: linear-gradient(135deg, #FFB75E 0%, #ED8F03 100%);
-        }
-        
-        &.pay-bg {
-          background: linear-gradient(135deg, #A8E6CF 0%, #3D84A8 100%);
-        }
-        
-        &.topup-bg {
-          background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-      }
-      
-      &:hover .service-icon-wrapper {
-        transform: translateY(-4px);
-        box-shadow: var(--sm-shadow-lg);
-      }
-      
-      .service-label {
-        margin: 0;
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--sm-text-primary);
-        text-align: center;
-      }
-    }
-  }
 }
 
-// TRANSACCIONES RECIENTES MODERNA
-.recent-transactions-section {
-  padding: 0 20px;
-  margin-bottom: 24px;
-  
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    
-    .section-title {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--sm-text-primary);
-    }
-    
-    .view-all-link {
-      font-size: 14px;
-      color: var(--sm-text-accent);
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-  
-  .transactions-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    
-    .transaction-item {
-      background: white;
-      border-radius: var(--sm-radius-lg);
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: var(--sm-shadow-md);
-      transition: all 0.3s ease;
-      
-      &:hover {
-        transform: translateX(4px);
-        box-shadow: var(--sm-shadow-lg);
-      }
-      
-      .transaction-left {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        flex: 1;
-        
-        .transaction-icon-wrapper {
-          width: 48px;
-          height: 48px;
-          border-radius: var(--sm-radius-md);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-          
-          ion-icon {
-            font-size: 24px;
-          }
-        }
-        
-        .transaction-info {
-          h4 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--sm-text-primary);
-          }
-          
-          p {
-            margin: 4px 0 0 0;
-            font-size: 13px;
-            color: var(--sm-text-secondary);
-          }
-        }
-      }
-      
-      .transaction-right {
-        text-align: right;
-        
-        .transaction-amount {
-          margin: 0;
-          font-size: 16px;
-          font-weight: 800;
-          color: var(--sm-text-primary);
-          
-          &.negative {
-            color: #EB445A;
-          }
-        }
-        
-        .transaction-percentage {
-          margin: 4px 0 0 0;
-          font-size: 12px;
-          color: var(--sm-text-secondary);
-        }
-      }
-    }
-  }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
-// Sección de Metas (mantener diseño mejorado)
-.goal-item {
-  margin-bottom: 20px;
-  padding: 20px;
-  background: white;
-  border-radius: var(--sm-radius-lg);
-  box-shadow: var(--sm-shadow-md);
-  
-  &:last-child {
-    margin-bottom: 0;
-  }
-  
-  .goal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    
-    .goal-name {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--sm-text-primary);
-    }
-    
-    .goal-percentage {
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--ion-color-primary);
-    }
-  }
-  
-  ion-progress-bar {
-    height: 12px;
-    border-radius: 6px;
-    margin: 12px 0;
-  }
-  
-  .goal-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12px;
-    
-    p {
-      margin: 0;
-      font-size: 13px;
-      color: var(--sm-text-secondary);
-      font-weight: 500;
-    }
-  }
-}
-
-// Estadísticas
 .stat-box {
-  text-align: center;
-  padding: 20px 12px;
   background: white;
-  border-radius: var(--sm-radius-lg);
-  box-shadow: var(--sm-shadow-md);
+  border-radius: 18px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
   
-  ion-icon {
-    font-size: 40px;
-    margin-bottom: 12px;
+  &:active {
+    transform: scale(0.96);
   }
   
-  h3 {
-    margin: 12px 0 6px 0;
-    font-size: 28px;
+  .stat-icon {
+    font-size: 32px;
+    color: #667eea;
+    margin-bottom: 8px;
+    
+    &.success {
+      color: #28C76F;
+    }
+  }
+  
+  .stat-number {
+    margin: 8px 0 4px 0;
+    font-size: 26px;
     font-weight: 800;
     color: var(--sm-text-primary);
   }
   
-  p {
+  .stat-text {
     margin: 0;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--sm-text-secondary);
-    font-weight: 500;
+    font-weight: 600;
   }
 }
 
-// Estado vacío
+// ==========================================
+// EMPTY STATE
+// ==========================================
 .empty-state {
   text-align: center;
   padding: 60px 32px;
   
-  ion-icon {
-    font-size: 80px;
-    margin-bottom: 20px;
-    opacity: 0.4;
+  .empty-icon-wrapper {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 24px auto;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    ion-icon {
+      font-size: 60px;
+      color: #667eea;
+      opacity: 0.7;
+    }
   }
   
   h2 {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 800;
     color: var(--sm-text-primary);
-    margin: 20px 0 12px 0;
+    margin: 0 0 12px 0;
   }
   
   p {
-    font-size: 16px;
-    margin-bottom: 28px;
+    font-size: 15px;
     line-height: 1.6;
     color: var(--sm-text-secondary);
+    margin: 0 0 32px 0;
+  }
+  
+  .empty-cta {
+    --border-radius: 16px;
+    --box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    font-weight: 600;
+    height: 52px;
   }
 }
 
-// Ajustes responsive
+// ==========================================
+// ESPACIADOR INFERIOR
+// ==========================================
+.bottom-spacer {
+  height: 80px;
+}
+
+// ==========================================
+// RESPONSIVE DESIGN
+// ==========================================
 @media (min-width: 768px) {
-  .balance-card-modern {
+  .dashboard-header,
+  .balance-section,
+  .quick-actions-section,
+  .category-spending-section,
+  .chart-section,
+  .goals-section,
+  .quick-stats-section {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
   }
   
-  .services-section,
-  .recent-transactions-section {
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
-  .services-grid {
+  .actions-grid {
     gap: 24px;
     
-    .service-item .service-icon-wrapper {
+    .action-item .action-icon-wrapper {
       width: 72px;
       height: 72px;
+      
+      ion-icon {
+        font-size: 32px;
+      }
     }
   }
 }
 
 @media (max-width: 360px) {
-  .services-grid {
-    grid-template-columns: repeat(4, 1fr);
+  .actions-grid {
     gap: 12px;
     
-    .service-item .service-icon-wrapper {
+    .action-item .action-icon-wrapper {
       width: 56px;
       height: 56px;
+      
+      ion-icon {
+        font-size: 24px;
+      }
+    }
+    
+    .action-label {
+      font-size: 11px;
     }
   }
-}
-.chart-container {
-  width: 100%;
-  max-width: 330px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
+  
+  .balance-main-card {
+    padding: 24px 20px;
+    
+    .balance-amount {
+      font-size: 36px;
+    }
+  }
 }

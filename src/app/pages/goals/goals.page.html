@@ -1,27 +1,19 @@
 <!--
-  Vista de Metas de Ahorro
+  Vista de Metas de Ahorro - Diseño Moderno
   Muestra las metas del usuario con su progreso
 -->
 
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Mis Metas</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="goals-content">
   
   <!-- Refresh -->
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- Encabezado grande -->
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Mis Metas</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- Header Minimalista -->
+  <div class="page-header">
+    <h1 class="page-title">Mis Metas</h1>
+  </div>
 
   <!-- Loading -->
   <div *ngIf="isLoading" class="loading-container">

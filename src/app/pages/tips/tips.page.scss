@@ -2,6 +2,43 @@
  * Estilos de la Página de Consejos Financieros - Diseño Moderno
  */
 
+.tips-content {
+  --background: #F8FAFC;
+}
+
+// Header con Back Button
+.page-header-with-back {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  
+  .back-button {
+    --padding-start: 0;
+    --padding-end: 0;
+    margin: 0;
+    
+    ion-icon {
+      font-size: 28px;
+      color: var(--sm-text-primary);
+    }
+  }
+  
+  .page-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--sm-text-primary);
+    flex: 1;
+    text-align: center;
+  }
+  
+  .spacer {
+    width: 40px;
+  }
+}
+
 // SECCIÓN DE BÚSQUEDA MODERNA
 .search-section {
   padding: 20px;

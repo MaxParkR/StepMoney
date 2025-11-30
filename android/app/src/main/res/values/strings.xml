@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">StepMoney</string>
+    <string name="title_activity_main">StepMoney</string>
+    <string name="package_name">com.stepmoney.app</string>
+    <string name="custom_url_scheme">com.stepmoney.app</string>
+</resources>

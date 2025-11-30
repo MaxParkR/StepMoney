@@ -5,7 +5,8 @@ import {
   CreateTransactionDTO, 
   TransactionFilter,
   TransactionSummary,
-  CategorySummary 
+  CategorySummary,
+  ExtendedBalance 
 } from '../models/transaction.model';
 import { StorageService } from './storage.service';
 import { CategoryService } from './category.service';

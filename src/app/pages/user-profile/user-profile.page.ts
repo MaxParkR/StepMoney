@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileFormData, UserProfile } from 'src/app/models/user-profile.model';
 import { ProfileImageService, UserProfileService } from 'src/app/services';
+import { StorageService } from 'src/app/services/storage.service';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
@@ -15,6 +16,15 @@ export class UserProfilePage implements OnInit {
   currentProfileImage: string | null = null;
   isLoading: boolean = false;
   isEditMode: boolean = false; // Determina si está editando un perfil existente
+
+  // Preferencias del usuario (cargadas desde onboarding)
+  userPreferences: {
+    currency: string;
+    monthlyIncome: number | null;
+    savingsGoal: number | null;
+    reminderTime: string;
+    enableNotifications: boolean;
+  } | null = null;
 
   formData: ProfileFormData = {
     fullName: '',
@@ -32,6 +42,7 @@ export class UserProfilePage implements OnInit {
   constructor(
     private profileImageService: ProfileImageService,
     private userProfileService: UserProfileService,
+    private storageService: StorageService,
     private alertController: AlertController,
     private loadingController: LoadingController,
     private toastController: ToastController
@@ -39,6 +50,7 @@ export class UserProfilePage implements OnInit {
 
   async ngOnInit() {
     await this.loadCurrentUserProfile();
+    await this.loadUserPreferences();
   }
 
   /**
@@ -69,6 +81,21 @@ export class UserProfilePage implements OnInit {
       await this.showToast('Error al cargar el perfil de usuario', 'danger');
     } finally {
       this.isLoading = false;
+    }
+  }
+
+  /**
+   * Carga las preferencias del usuario guardadas durante el onboarding
+   */
+  async loadUserPreferences() {
+    try {
+      const preferences = await this.storageService.get('user_preferences');
+      if (preferences) {
+        this.userPreferences = preferences;
+        console.log('⚙️ Preferencias de usuario cargadas:', preferences);
+      }
+    } catch (error) {
+      console.error('❌ Error al cargar preferencias:', error);
     }
   }
 

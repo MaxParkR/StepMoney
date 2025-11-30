@@ -5,7 +5,8 @@
 
 // Header con Back Button
 .page-header-with-back {
-  padding: 16px 20px;
+  // Padding superior incluye el safe-area para evitar superposición con la barra de estado
+  padding: calc(16px + env(safe-area-inset-top, 0px)) 20px 16px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;

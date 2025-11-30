@@ -26,6 +26,15 @@ export class ReportService {
   }
 
   /**
+   * Parsea una fecha en formato YYYY-MM-DD a objeto Date en zona horaria local
+   * Evita problemas de conversión UTC
+   */
+  private parseLocalDate(dateString: string): Date {
+    const [year, month, day] = dateString.split('-').map(num => parseInt(num, 10));
+    return new Date(year, month - 1, day); // mes es 0-indexed
+  }
+
+  /**
    * Genera reporte del mes actual
    */
   getCurrentMonthReport() {
@@ -116,7 +125,7 @@ export class ReportService {
       const year = date.getFullYear();
       
       const monthTransactions = allTransactions.filter(txn => {
-        const txnDate = new Date(txn.date);
+        const txnDate = this.parseLocalDate(txn.date);
         return txnDate.getMonth() === month && txnDate.getFullYear() === year;
       });
       
@@ -200,7 +209,7 @@ export class ReportService {
     const dailyMap = new Map<string, number>();
     
     expenses.forEach(txn => {
-      const day = new Date(txn.date).getDate();
+      const day = this.parseLocalDate(txn.date).getDate();
       const key = day.toString();
       const current = dailyMap.get(key) || 0;
       dailyMap.set(key, current + txn.amount);

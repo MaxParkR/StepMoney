@@ -50,9 +50,9 @@
         </div>
       </div>
       
-      <div class="transactions-list">
+      <ion-list class="transactions-list" lines="none">
         <ion-item-sliding *ngFor="let transaction of group.transactions">
-          <div class="transaction-card">
+          <ion-item class="transaction-item" (click)="openEditTransactionModal(transaction)">
             <div class="transaction-content">
               <div class="transaction-icon-wrapper" 
                    [style.background]="transaction.categoryColor + '20'">
@@ -74,16 +74,19 @@
                 </p>
               </div>
             </div>
-          </div>
+          </ion-item>
           
           <!-- Opciones deslizables -->
           <ion-item-options side="end">
+            <ion-item-option color="primary" (click)="openEditTransactionModal(transaction)">
+              <ion-icon slot="icon-only" name="create"></ion-icon>
+            </ion-item-option>
             <ion-item-option color="danger" (click)="deleteTransaction(transaction)">
               <ion-icon slot="icon-only" name="trash"></ion-icon>
             </ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
-      </div>
+      </ion-list>
     </div>
   </div>
 
@@ -163,22 +166,45 @@
           </div>
         </div>
 
-        <!-- Categoría con diseño moderno -->
+        <!-- Categoría con diseño moderno y visual -->
         <div class="form-field">
           <label>Categoría</label>
-          <ion-item lines="none" class="modern-item">
-            <ion-icon name="apps-outline" slot="start"></ion-icon>
-            <ion-select 
-              [(ngModel)]="newTransaction.categoryId" 
-              placeholder="Seleccionar categoría"
-              interface="action-sheet">
-              <ion-select-option 
-                *ngFor="let category of availableCategories" 
-                [value]="category.id">
-                {{ category.icon }} {{ category.name }}
-              </ion-select-option>
-            </ion-select>
+          <div class="category-selector">
+            <div 
+              *ngFor="let category of availableCategories" 
+              class="category-option"
+              [class.selected]="newTransaction.categoryId === category.id"
+              (click)="selectCategory(category.id)">
+              <div class="category-icon-wrapper" [style.background]="category.color + '20'">
+                <ion-icon 
+                  [name]="category.icon" 
+                  [style.color]="category.color">
+                </ion-icon>
+              </div>
+              <span class="category-name">{{ category.name }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Campo personalizado para "Otros" -->
+        <div class="form-field custom-category-field" *ngIf="isOtherCategorySelected()">
+          <label>
+            <ion-icon name="create-outline"></ion-icon>
+            Especifica el tipo {{ newTransaction.type === 'income' ? 'de ingreso' : 'de gasto' }}
+          </label>
+          <ion-item lines="none" class="modern-item custom-input-highlight">
+            <ion-icon name="pricetag-outline" slot="start"></ion-icon>
+            <ion-input 
+              [(ngModel)]="customCategoryName" 
+              placeholder="Ej: Ganancias proyecto, Premio, Reembolso..."
+              [clearInput]="true"
+              class="custom-category-input">
+            </ion-input>
           </ion-item>
+          <p class="helper-text">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            Dale un nombre específico a este {{ newTransaction.type === 'income' ? 'ingreso' : 'gasto' }}
+          </p>
         </div>
 
         <!-- Fecha -->
@@ -216,6 +242,108 @@
             [disabled]="!newTransaction.amount || !newTransaction.categoryId">
             <ion-icon name="checkmark-circle" slot="start"></ion-icon>
             Guardar
+          </ion-button>
+        </div>
+
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<!-- Modal para Editar Transacción -->
+<ion-modal [isOpen]="isEditingTransaction" (didDismiss)="closeEditTransactionModal()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Editar Transacción</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeEditTransactionModal()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="modal-content-bg" *ngIf="editingTransaction">
+      <div class="modal-content-modern">
+        
+        <!-- Tipo de transacción (solo lectura) -->
+        <div class="transaction-type-display">
+          <div class="type-badge" [class.income]="editingTransaction.type === 'income'" [class.expense]="editingTransaction.type === 'expense'">
+            <ion-icon [name]="editingTransaction.type === 'income' ? 'trending-up' : 'trending-down'"></ion-icon>
+            <span>{{ editingTransaction.type === 'income' ? 'Ingreso' : 'Gasto' }}</span>
+          </div>
+        </div>
+
+        <!-- Monto destacado -->
+        <div class="amount-input-section">
+          <label>Monto</label>
+          <div class="amount-display">
+            <span class="currency">$</span>
+            <input 
+              type="number" 
+              [(ngModel)]="editingTransaction.amount" 
+              placeholder="0"
+              inputmode="decimal"
+              class="amount-input">
+          </div>
+        </div>
+
+        <!-- Categoría -->
+        <div class="form-field">
+          <label>Categoría</label>
+          <div class="category-selector">
+            <div 
+              *ngFor="let category of getEditCategories()" 
+              class="category-option"
+              [class.selected]="editingTransaction.categoryId === category.id"
+              (click)="editingTransaction.categoryId = category.id">
+              <div class="category-icon-wrapper" [style.background]="category.color + '20'">
+                <ion-icon 
+                  [name]="category.icon" 
+                  [style.color]="category.color">
+                </ion-icon>
+              </div>
+              <span class="category-name">{{ category.name }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fecha -->
+        <div class="form-field">
+          <label>Fecha</label>
+          <ion-item lines="none" class="modern-item">
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            <ion-input 
+              type="date" 
+              [(ngModel)]="editingTransaction.date">
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <!-- Descripción -->
+        <div class="form-field">
+          <label>Nota (opcional)</label>
+          <ion-item lines="none" class="modern-item">
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            <ion-textarea 
+              [(ngModel)]="editingTransaction.description" 
+              placeholder="Añade una descripción..."
+              rows="3"
+              auto-grow="true">
+            </ion-textarea>
+          </ion-item>
+        </div>
+
+        <!-- Botón de guardar moderno -->
+        <div class="save-button-container">
+          <ion-button 
+            expand="block" 
+            (click)="saveEditedTransaction()" 
+            class="save-button"
+            [disabled]="!editingTransaction.amount || !editingTransaction.categoryId">
+            <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+            Guardar Cambios
           </ion-button>
         </div>
 

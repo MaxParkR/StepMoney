@@ -1,0 +1,761 @@
+/**
+ * Estilos de la Página de Onboarding - StepMoney
+ * Diseño elegante con gradientes y animaciones suaves
+ */
+
+// Importar fuente similar al logo (geométrica/moderna)
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+// Variables locales
+$gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$gradient-light: linear-gradient(180deg, #e8f4fd 0%, #f8fafc 100%);
+$font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+.onboarding-content {
+  --background: #f8fafc;
+}
+
+// ==========================================
+// CONTENEDOR DE PASOS
+// ==========================================
+.step-container {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+// ==========================================
+// PASO 0: PANTALLA DE BIENVENIDA
+// ==========================================
+.welcome-header {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 300px;
+  overflow: hidden;
+  flex-shrink: 0;
+  // Padding superior para el safe-area en la pantalla de bienvenida
+  padding-top: env(safe-area-inset-top, 0px);
+  
+  .welcome-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .welcome-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(to top, #f8fafc 0%, transparent 100%);
+  }
+}
+
+.welcome-content {
+  flex: 1;
+  padding: 20px 24px 24px 24px;
+  position: relative;
+  z-index: 10;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-text {
+  text-align: center;
+  margin-bottom: 20px;
+  
+  h2 {
+    font-family: $font-heading;
+    font-size: 26px;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.5px;
+    animation: fadeInUp 0.6s ease-out;
+  }
+  
+  p {
+    font-family: $font-heading;
+    font-size: 15px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+    animation: fadeInUp 0.6s ease-out 0.1s both;
+  }
+}
+
+// Lista de características
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  animation: fadeInUp 0.6s ease-out both;
+  flex-shrink: 0;
+  
+  &:nth-child(1) { animation-delay: 0.2s; }
+  &:nth-child(2) { animation-delay: 0.3s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+  
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: $gradient-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    
+    ion-icon {
+      font-size: 24px;
+      color: white;
+    }
+  }
+  
+  .feature-text {
+    h4 {
+      font-family: $font-heading;
+      margin: 0 0 2px 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    
+    p {
+      margin: 0;
+      font-size: 13px;
+      color: #64748b;
+    }
+  }
+}
+
+// Botones de acción
+.action-buttons {
+  padding: 8px 0 0 0;
+  animation: fadeInUp 0.6s ease-out 0.5s both;
+  flex-shrink: 0;
+  
+  .btn-primary {
+    --border-radius: 14px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    font-family: $font-heading;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: none;
+    --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
+  }
+}
+
+// ==========================================
+// PASOS 1 Y 2: FORMULARIOS
+// ==========================================
+.step-header {
+  position: relative;
+  background: $gradient-primary;
+  // Padding superior incluye el safe-area para evitar superposición con la barra de estado
+  padding: calc(50px + env(safe-area-inset-top, 0px)) 24px 70px 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+  
+  .header-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      
+      &.circle-1 {
+        width: 200px;
+        height: 200px;
+        top: -60px;
+        right: -40px;
+      }
+      
+      &.circle-2 {
+        width: 150px;
+        height: 150px;
+        bottom: -30px;
+        left: -30px;
+      }
+    }
+  }
+  
+  .header-content {
+    position: relative;
+    z-index: 2;
+    
+    .step-indicator {
+      font-family: $font-heading;
+      display: inline-block;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 12px;
+    }
+    
+    h1 {
+      font-family: $font-heading;
+      margin: 0 0 8px 0;
+      font-size: 28px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+    }
+    
+    p {
+      font-family: $font-heading;
+      margin: 0;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.5;
+    }
+  }
+}
+
+.form-container {
+  flex: 1;
+  padding: 0 24px 40px 24px;
+  margin-top: -40px;
+  position: relative;
+  z-index: 10;
+  background: #f8fafc;
+  border-radius: 32px 32px 0 0;
+}
+
+// Avatar
+.avatar-section {
+  display: flex;
+  justify-content: center;
+  margin: -30px 0 24px 0;
+  
+  .avatar-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    border: 4px solid #f8fafc;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    ion-icon {
+      font-size: 36px;
+      color: #94a3b8;
+    }
+    
+    .avatar-initial {
+      font-size: 32px;
+      font-weight: 800;
+      color: #667eea;
+    }
+  }
+}
+
+// Saludo personalizado
+.personalized-greeting {
+  text-align: center;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 16px;
+  margin-bottom: 24px;
+  
+  .greeting-emoji {
+    font-size: 24px;
+    margin-right: 8px;
+  }
+  
+  span {
+    font-size: 16px;
+    color: #1e293b;
+    
+    strong {
+      color: #667eea;
+    }
+  }
+}
+
+// Campos del formulario
+.form-field {
+  margin-bottom: 20px;
+  
+  .field-label {
+    font-family: $font-heading;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 10px;
+    
+    ion-icon {
+      font-size: 18px;
+      color: #667eea;
+    }
+  }
+  
+  .field-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    background: white !important;
+    background-color: white !important;
+    color: #1e293b !important;
+    color-scheme: light;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: $font-heading;
+    
+    &::placeholder {
+      color: #94a3b8;
+    }
+    
+    &:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+    
+    &.with-prefix {
+      padding-left: 40px;
+    }
+    
+    &.time-input {
+      padding: 12px 16px;
+      color-scheme: light;
+    }
+    
+    // Forzar fondo blanco en inputs de número y hora
+    &[type="number"],
+    &[type="time"] {
+      background: white !important;
+      background-color: white !important;
+      color: #1e293b !important;
+      
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      
+      &::-webkit-calendar-picker-indicator {
+        filter: invert(0);
+        opacity: 0.6;
+      }
+    }
+  }
+  
+  .field-select {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    background: white;
+    color: #1e293b;
+    cursor: pointer;
+    outline: none;
+    font-family: $font-heading;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%2394a3b8' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    
+    &:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+  }
+  
+  .field-hint {
+    font-family: $font-heading;
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: #94a3b8;
+  }
+}
+
+.input-with-prefix {
+  position: relative;
+  
+  .input-prefix {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    font-weight: 600;
+    color: #64748b;
+    z-index: 1;
+  }
+  
+  input {
+    background: white !important;
+    background-color: white !important;
+    color: #1e293b !important;
+  }
+}
+
+// Selector de tipo de meta
+.goal-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.goal-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 8px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  ion-icon {
+    font-size: 28px;
+    color: #64748b;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  span {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-align: center;
+  }
+  
+  &:hover {
+    border-color: #667eea;
+  }
+  
+  &.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    
+    ion-icon {
+      color: #667eea;
+      transform: scale(1.1);
+    }
+    
+    span {
+      color: #667eea;
+    }
+  }
+}
+
+// Sección de notificaciones
+.notifications-section {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.notification-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  .toggle-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    ion-icon {
+      font-size: 24px;
+      color: #667eea;
+    }
+    
+    h4 {
+      margin: 0 0 2px 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+    
+    p {
+      margin: 0;
+      font-size: 13px;
+      color: #64748b;
+    }
+  }
+}
+
+.reminder-time {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+  
+  input[type="time"] {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    background: white !important;
+    background-color: white !important;
+    color: #1e293b !important;
+    color-scheme: light !important;
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    
+    &::-webkit-calendar-picker-indicator {
+      background: transparent;
+      color: #64748b;
+      cursor: pointer;
+      filter: invert(0) !important;
+      opacity: 0.6;
+    }
+    
+    &::-webkit-datetime-edit {
+      color: #1e293b;
+    }
+    
+    &::-webkit-datetime-edit-fields-wrapper {
+      background: transparent;
+    }
+    
+    &:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+  }
+}
+
+// Botones de navegación
+.navigation-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  
+  .btn-back {
+    flex: 1;
+    --border-radius: 14px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: none;
+    --border-color: #e2e8f0;
+    --color: #64748b;
+  }
+  
+  .btn-next, .btn-finish {
+    flex: 2;
+    --border-radius: 14px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: none;
+    --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
+  }
+}
+
+// Skip option
+.skip-section {
+  text-align: center;
+  margin-top: 20px;
+  
+  span {
+    font-size: 14px;
+    color: #94a3b8;
+    cursor: pointer;
+    text-decoration: underline;
+    
+    &:hover {
+      color: #64748b;
+    }
+  }
+}
+
+// Indicador de progreso
+.progress-indicator {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  
+  .progress-dots {
+    display: flex;
+    gap: 10px;
+    
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      transition: all 0.3s ease;
+      
+      &.active {
+        width: 28px;
+        border-radius: 5px;
+        background: #667eea;
+      }
+      
+      &.completed {
+        background: #22c55e;
+      }
+    }
+  }
+}
+
+// ==========================================
+// ANIMACIONES
+// ==========================================
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+// ==========================================
+// RESPONSIVE
+// ==========================================
+@media (max-height: 700px) {
+  .welcome-header {
+    min-height: 200px;
+  }
+  
+  .welcome-content {
+    padding: 16px 20px 16px 20px;
+  }
+  
+  .welcome-text {
+    margin-bottom: 12px;
+    
+    h2 {
+      font-size: 22px;
+    }
+    
+    p {
+      font-size: 14px;
+    }
+  }
+  
+  .features-list {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .feature-item {
+    padding: 10px 12px;
+    
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      
+      ion-icon {
+        font-size: 20px;
+      }
+    }
+    
+    .feature-text {
+      h4 {
+        font-size: 14px;
+      }
+      
+      p {
+        font-size: 12px;
+      }
+    }
+  }
+  
+  .action-buttons .btn-primary {
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 380px) {
+  .welcome-header {
+    min-height: 180px;
+  }
+  
+  .welcome-text h2 {
+    font-size: 20px;
+  }
+  
+  .goal-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .step-header h1 {
+    font-size: 24px;
+  }
+}
+
+@media (min-width: 768px) {
+  .step-container {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .welcome-header {
+    min-height: 350px;
+  }
+  
+  .welcome-content,
+  .form-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+}
+

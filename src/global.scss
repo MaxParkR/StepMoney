@@ -42,9 +42,22 @@
  * Estos estilos se aplican a toda la aplicación
  */
 
-/* Contenido de páginas con padding estándar */
+/* Safe Area para dispositivos móviles */
+/* Evita que el contenido se superponga con el notch, status bar, etc. */
 ion-content {
   --background: var(--sm-background);
+  --padding-top: env(safe-area-inset-top);
+  --padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Safe area para headers */
+ion-header {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Safe area para tabs en la parte inferior */
+ion-tab-bar {
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Encabezados más estilizados - SIN FONDO AZUL */
@@ -149,13 +162,51 @@ ion-select {
   --padding-end: 12px;
 }
 
-/* Segmentos (tabs secundarios) */
+/* Segmentos (tabs secundarios) - Diseño Moderno */
 ion-segment {
   --background: white;
-  border-radius: var(--sm-radius-md);
-  padding: 4px;
-  margin: var(--sm-spacing-md);
-  box-shadow: var(--sm-shadow-sm);
+  border-radius: var(--sm-radius-lg);
+  padding: 6px;
+  box-shadow: var(--sm-shadow-md);
+  
+  ion-segment-button {
+    --border-radius: 12px;
+    --indicator-box-shadow: none;
+    --indicator-color: transparent;
+    --color: var(--sm-text-secondary);
+    --color-checked: white;
+    --background-checked: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 44px;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: none;
+    letter-spacing: 0;
+    transition: all 0.3s ease;
+    margin: 0 2px;
+    
+    &::part(indicator) {
+      display: none;
+    }
+    
+    &::part(indicator-background) {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      opacity: 1;
+    }
+    
+    &.segment-button-checked {
+      font-weight: 700;
+      
+      ion-label {
+        color: white;
+      }
+    }
+    
+    ion-label {
+      margin: 0;
+      font-size: 14px;
+    }
+  }
 }
 
 /* Mejora visual de botones */

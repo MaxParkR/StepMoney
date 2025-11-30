@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { TransactionService } from '../../services/transaction.service';
 import { GoalService } from '../../services/goal.service';
-import { TransactionSummary } from '../../models/transaction.model';
+import { UserProfileService } from '../../services/user-profile.service';
+import { TransactionSummary, ExtendedBalance } from '../../models/transaction.model';
 import { GoalProgress } from '../../models/goal.model';
 
 import { Chart, registerables } from 'chart.js';
@@ -30,6 +32,18 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     byCategory: []
   };
 
+  // Balance extendido con información de metas
+  extendedBalance: ExtendedBalance = {
+    totalIncome: 0,
+    totalExpense: 0,
+    balanceTotal: 0,
+    balanceSavedInGoals: 0,
+    balanceAvailable: 0,
+    transactionCount: 0,
+    activeGoalsCount: 0,
+    byCategory: []
+  };
+
   goalsProgress: GoalProgress[] = [];
 
   goalsStats = {
@@ -43,6 +57,19 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
 
   isLoading = true;
 
+  // ----- Información del usuario -----
+  userName = '';
+
+  // ----- Selector de período -----
+  selectedMonth: number;
+  selectedYear: number;
+  
+  // Nombres de los meses
+  private monthNames = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+
   // ----- Control de suscripciones y limpieza -----
   private destroy$ = new Subject<void>();
 
@@ -54,13 +81,21 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private transactionService: TransactionService,
     private goalService: GoalService,
+    private userProfileService: UserProfileService,
     private router: Router,
-    private ngZone: NgZone
-  ) {}
+    private ngZone: NgZone,
+    private alertController: AlertController
+  ) {
+    // Inicializar con el mes actual
+    const now = new Date();
+    this.selectedMonth = now.getMonth();
+    this.selectedYear = now.getFullYear();
+  }
 
   
   ngOnInit() {
     console.log('📱 Dashboard cargado');
+    this.loadUserName();
     this.loadDashboardData();
     this.subscribeToDataChanges();
   }
@@ -85,19 +120,47 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // ---------------------
+  // Cargar información del usuario
+  // ---------------------
+  async loadUserName() {
+    try {
+      const userProfile = await this.userProfileService.getCurrentUserProfile();
+      if (userProfile && userProfile.fullName) {
+        // Obtener solo el primer nombre
+        const firstName = userProfile.fullName.split(' ')[0];
+        this.userName = firstName;
+        console.log('👤 Usuario:', this.userName);
+      } else {
+        this.userName = '';
+        console.log('👤 No hay perfil de usuario configurado');
+      }
+    } catch (error) {
+      console.error('❌ Error al cargar nombre de usuario:', error);
+      this.userName = '';
+    }
+  }
+
+  // ---------------------
   // Carga de datos
   // ---------------------
   async loadDashboardData() {
     try {
       this.isLoading = true;
 
-      
-      this.summary = this.transactionService.getCurrentMonthSummary();
+      // Obtener resumen del mes seleccionado
+      this.summary = this.getSelectedMonthSummary();
       this.goalsProgress = this.goalService.getAllGoalsProgress();
       this.goalsStats = this.goalService.getGoalsStatistics();
+      
+      // Calcular balance extendido
+      this.extendedBalance = this.calculateExtendedBalance();
 
       console.log('📊 Datos del dashboard cargados:', {
-        balance: this.summary.balance,
+        mes: this.getSelectedMonthName(),
+        año: this.selectedYear,
+        balanceTotal: this.extendedBalance.balanceTotal,
+        balanceDisponible: this.extendedBalance.balanceAvailable,
+        balanceAhorrado: this.extendedBalance.balanceSavedInGoals,
         metas: this.goalsProgress.length
       });
 
@@ -111,6 +174,95 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // ---------------------
+  // Obtener resumen del mes seleccionado
+  // ---------------------
+  private getSelectedMonthSummary(): TransactionSummary {
+    const startOfMonth = new Date(this.selectedYear, this.selectedMonth, 1);
+    const endOfMonth = new Date(this.selectedYear, this.selectedMonth + 1, 0);
+
+    return this.transactionService.getTransactionsSummary({
+      startDate: startOfMonth.toISOString().split('T')[0],
+      endDate: endOfMonth.toISOString().split('T')[0]
+    });
+  }
+
+  // ---------------------
+  // Calcular balance extendido
+  // ---------------------
+  /**
+   * Calcula el balance extendido combinando transacciones y metas
+   * Proporciona una vista realista de la situación financiera
+   * 
+   * Balance Total = Todo tu dinero (Ingresos - Gastos)
+   * Balance Ahorrado = Dinero comprometido en metas activas
+   * Balance Disponible = Dinero que puedes gastar libremente (Total - Ahorrado)
+   */
+  calculateExtendedBalance(): ExtendedBalance {
+    // Usar el resumen ya calculado
+    const summary = this.summary;
+    
+    // Calcular dinero comprometido en metas activas (todas las metas, no solo del mes)
+    const activeGoals = this.goalService.getActiveGoals();
+    const balanceSavedInGoals = activeGoals.reduce((total, goal) => {
+      return total + goal.currentAmount;
+    }, 0);
+    
+    // Calcular balance disponible
+    // Si tu balance total es menor que lo ahorrado, el disponible es 0
+    const balanceAvailable = Math.max(0, summary.balance - balanceSavedInGoals);
+    
+    return {
+      totalIncome: summary.totalIncome,
+      totalExpense: summary.totalExpense,
+      balanceTotal: summary.balance,
+      balanceSavedInGoals: balanceSavedInGoals,
+      balanceAvailable: balanceAvailable,
+      transactionCount: summary.transactionCount,
+      activeGoalsCount: activeGoals.length,
+      byCategory: summary.byCategory
+    };
+  }
+
+  // ---------------------
+  // Navegación de meses
+  // ---------------------
+  previousMonth() {
+    if (this.selectedMonth === 0) {
+      this.selectedMonth = 11;
+      this.selectedYear--;
+    } else {
+      this.selectedMonth--;
+    }
+    this.loadDashboardData();
+  }
+
+  nextMonth() {
+    if (this.selectedMonth === 11) {
+      this.selectedMonth = 0;
+      this.selectedYear++;
+    } else {
+      this.selectedMonth++;
+    }
+    this.loadDashboardData();
+  }
+
+  goToCurrentMonth() {
+    const now = new Date();
+    this.selectedMonth = now.getMonth();
+    this.selectedYear = now.getFullYear();
+    this.loadDashboardData();
+  }
+
+  getSelectedMonthName(): string {
+    return this.monthNames[this.selectedMonth];
+  }
+
+  isCurrentMonth(): boolean {
+    const now = new Date();
+    return this.selectedMonth === now.getMonth() && this.selectedYear === now.getFullYear();
+  }
+
+  // ---------------------
   // Suscripciones a cambios
   // ---------------------
   private subscribeToDataChanges() {
@@ -118,8 +270,11 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     this.transactionService.transactions$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        // Actualizamos summary y pedimos actualización del chart
-        this.summary = this.transactionService.getCurrentMonthSummary();
+        // Actualizamos summary del mes seleccionado
+        this.summary = this.getSelectedMonthSummary();
+        // Recalcular balance extendido cuando cambian las transacciones
+        this.extendedBalance = this.calculateExtendedBalance();
+        // Actualizar gráfico
         this.requestChartUpdate();
       });
 
@@ -129,6 +284,8 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(() => {
         this.goalsProgress = this.goalService.getAllGoalsProgress();
         this.goalsStats = this.goalService.getGoalsStatistics();
+        // Recalcular balance extendido cuando cambian las metas
+        this.extendedBalance = this.calculateExtendedBalance();
       });
   }
 
@@ -318,6 +475,46 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  /**
+   * Calcula el porcentaje de un valor sobre un total
+   */
+  getPercentage(value: number, total: number): number {
+    if (total <= 0) return 0;
+    return Math.round((value / total) * 100);
+  }
+
+  /**
+   * Muestra información explicativa sobre el balance
+   */
+  async showBalanceInfo() {
+    const alert = await this.alertController.create({
+      header: '💡 Entendiendo tu Balance',
+      cssClass: 'balance-info-alert',
+      message: 
+        '🏦 BALANCE TOTAL\n' +
+        'Todo tu dinero (Ingresos - Gastos)\n\n' +
+        
+        '💰 DISPONIBLE PARA GASTAR\n' +
+        'Dinero libre que puedes usar sin afectar tus metas de ahorro\n\n' +
+        
+        '🎯 AHORRADO EN METAS\n' +
+        'Dinero comprometido en tus objetivos. Este dinero sigue siendo tuyo, pero está reservado para cumplir tus metas.\n\n' +
+        
+        '📊 FÓRMULA\n' +
+        'Disponible = Balance Total - Ahorrado\n\n' +
+        
+        '💡 EJEMPLO\n' +
+        'Si tienes $1,000,000 de balance total y has ahorrado $300,000 en metas, tu dinero disponible es $700,000.',
+      buttons: [
+        {
+          text: 'Entendido',
+          cssClass: 'alert-button-confirm'
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   addTransaction() {
     this.ngZone.run(() => {
       this.router.navigate(['/tabs/transactions'], { 
@@ -343,12 +540,11 @@ export class DashboardPage implements OnInit, OnDestroy, AfterViewInit {
   }
 
   getCurrentMonthName(): string {
-    const months = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-    ];
-    const currentDate = new Date();
-    return months[currentDate.getMonth()];
+    return this.monthNames[this.selectedMonth];
+  }
+
+  getSelectedPeriodLabel(): string {
+    return `${this.monthNames[this.selectedMonth]} ${this.selectedYear}`;
   }
 
   getCurrentDay(): number {

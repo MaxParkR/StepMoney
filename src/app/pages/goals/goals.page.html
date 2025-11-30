@@ -197,53 +197,78 @@
     </div>
 
     <!-- Lista de Metas Completadas -->
-    <div *ngIf="currentView === 'completed'">
-      <ion-card *ngFor="let goal of completedGoals" class="goal-card completed">
-        <ion-card-content>
-          <div class="goal-header">
-            <div class="goal-icon" [style.background-color]="goal.color">
+    <div *ngIf="currentView === 'completed'" class="completed-goals-container">
+      
+      <div *ngFor="let goal of completedGoals" class="completed-goal-card">
+        <!-- Ribbon de completada -->
+        <div class="completed-ribbon">
+          <ion-icon name="checkmark-circle"></ion-icon>
+          <span>¡Meta Lograda!</span>
+        </div>
+
+        <!-- Header con confetti visual -->
+        <div class="completed-card-header">
+          <div class="completed-icon-wrapper" [style.background]="goal.color">
               <ion-icon [name]="goal.icon"></ion-icon>
+            <div class="success-badge">
+              <ion-icon name="checkmark"></ion-icon>
             </div>
-            <div class="goal-info">
-              <h3 class="goal-name">{{ goal.name }}</h3>
-              <p class="text-muted" *ngIf="goal.completedAt">
-                Completada el {{ formatDate(goal.completedAt) }}
-              </p>
             </div>
-            <ion-chip color="success">
-              <ion-icon name="checkmark-circle"></ion-icon>
-              <ion-label>Completada</ion-label>
-            </ion-chip>
+          <div class="completed-info">
+            <h3>{{ goal.name }}</h3>
+            <p *ngIf="goal.description" class="description">{{ goal.description }}</p>
+          </div>
           </div>
 
-          <div class="goal-completed-info">
-            <div class="completed-amount">
-              <ion-icon name="trophy" color="warning"></ion-icon>
-              <span>{{ formatCurrency(goal.currentAmount) }} ahorrados</span>
+        <!-- Monto ahorrado destacado -->
+        <div class="completed-amount-section">
+          <div class="trophy-icon">
+            <ion-icon name="trophy"></ion-icon>
             </div>
+          <div class="amount-details">
+            <span class="amount-label">Total Ahorrado</span>
+            <span class="amount-value">{{ formatCurrency(goal.currentAmount) }}</span>
           </div>
+        </div>
+
+        <!-- Fecha de completación -->
+        <div class="completed-date" *ngIf="goal.completedAt">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>Completada el {{ formatDate(goal.completedAt) }}</span>
+        </div>
+
+        <!-- Progress bar al 100% -->
+        <div class="completed-progress">
+          <div class="progress-bar-full"></div>
+          <span class="progress-label">100% Completado</span>
+        </div>
+
+        <!-- Acciones -->
+        <div class="completed-actions">
           <ion-button 
-            fill="clear" 
-            color="secondary" 
-            (click)="openEditGoalModal(goal)"
-            class="edit-button">
-            <ion-icon name="create-outline"></ion-icon>
+            fill="outline" 
+            color="medium"
+            size="small"
+            (click)="openEditGoalModal(goal)">
+            <ion-icon name="create-outline" slot="start"></ion-icon>
+            Editar
           </ion-button>
           <ion-button 
-            fill="clear" 
+            fill="outline" 
+            color="danger"
             size="small" 
-            color="danger" 
             (click)="deleteGoal(goal)">
             <ion-icon name="trash-outline" slot="start"></ion-icon>
             Eliminar
           </ion-button>
-
-        </ion-card-content>
-      </ion-card>
+        </div>
+      </div>
 
       <!-- Estado vacío (sin metas completadas) -->
       <div *ngIf="completedGoals.length === 0" class="empty-state">
-        <ion-icon name="trophy-outline" size="large" color="medium"></ion-icon>
+        <div class="empty-icon-wrapper">
+          <ion-icon name="trophy-outline"></ion-icon>
+        </div>
         <h2>Aún no has completado ninguna meta</h2>
         <p class="text-muted">
           Sigue ahorrando en tus metas activas para verlas aquí
@@ -497,6 +522,54 @@
           <div class="goal-icon" [style.background-color]="selectedGoalForContribution.color">
             <ion-icon [name]="selectedGoalForContribution.icon"></ion-icon>
           </div>
-          <div>
+          <div class="goal-details">
             <h3>{{ selectedGoalForContribution.name }}</h3>
-            <
+            <p>{{ formatCurrency(selectedGoalForContribution.currentAmount) }} de {{ formatCurrency(selectedGoalForContribution.targetAmount) }}</p>
+          </div>
+        </div>
+
+        <!-- Estadísticas de la meta -->
+        <div class="contribution-stats">
+          <div class="stat-item">
+            <span class="stat-label">Progreso Actual</span>
+            <span class="stat-value highlight">{{ getProgress(selectedGoalForContribution.id)?.percentage || 0 }}%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Falta por ahorrar</span>
+            <span class="stat-value">{{ formatCurrency(selectedGoalForContribution.targetAmount - selectedGoalForContribution.currentAmount) }}</span>
+          </div>
+        </div>
+
+        <!-- Campo de monto -->
+        <ion-item>
+          <ion-label position="stacked">Monto a Ahorrar *</ion-label>
+          <ion-input 
+            type="number" 
+            [(ngModel)]="contributionAmount" 
+            placeholder="Ingresa el monto"
+            inputmode="decimal">
+          </ion-input>
+        </ion-item>
+
+        <!-- Nota opcional -->
+        <ion-item>
+          <ion-label position="stacked">Nota (opcional)</ion-label>
+          <ion-textarea 
+            [(ngModel)]="contributionNote" 
+            placeholder="Ej: Ahorro del mes de diciembre"
+            rows="2">
+          </ion-textarea>
+        </ion-item>
+
+        <!-- Botón de guardar -->
+        <div class="form-actions">
+          <ion-button expand="block" (click)="saveContribution()" color="success">
+            <ion-icon name="wallet" slot="start"></ion-icon>
+            Agregar {{ formatCurrency(contributionAmount || 0) }}
+          </ion-button>
+        </div>
+
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

@@ -53,6 +53,26 @@ export interface TransactionSummary {
 }
 
 /**
+ * Interface para balance extendido con información de metas
+ * Proporciona una vista completa de la situación financiera
+ */
+export interface ExtendedBalance {
+  // Balance de transacciones
+  totalIncome: number;           // Total de ingresos
+  totalExpense: number;          // Total de gastos
+  balanceTotal: number;          // Balance total (ingresos - gastos)
+  
+  // Balance relacionado con metas
+  balanceSavedInGoals: number;   // Dinero comprometido en metas activas
+  balanceAvailable: number;      // Balance disponible para gastar (total - ahorrado)
+  
+  // Información adicional
+  transactionCount: number;      // Cantidad de transacciones
+  activeGoalsCount: number;      // Cantidad de metas activas
+  byCategory: CategorySummary[]; // Resumen por categoría
+}
+
+/**
  * Resumen por categoría
  */
 export interface CategorySummary {

@@ -22,20 +22,98 @@
     <!-- Header Minimalista -->
     <div class="dashboard-header">
       <div>
-        <p class="greeting-text">Hola 👋</p>
+        <p class="greeting-text">
+          Hola<ng-container *ngIf="userName">, {{ userName }}</ng-container> 👋
+        </p>
         <h1 class="page-title">Balance Actual</h1>
       </div>
       <ion-icon name="notifications-outline" class="notification-icon"></ion-icon>
     </div>
 
-    <!-- Balance Total - Diseño Limpio -->
+    <!-- Selector de Mes -->
+    <div class="month-selector">
+      <button class="month-nav-btn" (click)="previousMonth()">
+        <ion-icon name="chevron-back"></ion-icon>
+      </button>
+      <div class="month-display" (click)="goToCurrentMonth()">
+        <span class="month-name">{{ getSelectedPeriodLabel() }}</span>
+        <span class="current-badge" *ngIf="!isCurrentMonth()">Ir a hoy</span>
+      </div>
+      <button class="month-nav-btn" (click)="nextMonth()">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </button>
+    </div>
+
+    <!-- Balance Total - Diseño Limpio con Información Extendida -->
     <div class="balance-section">
+      <!-- Balance Principal -->
       <div class="balance-main-card">
-        <p class="balance-label">Balance Total</p>
-        <h1 class="balance-amount" [class.positive]="summary.balance > 0" [class.negative]="summary.balance < 0">
-          {{ formatCurrency(summary.balance) }}
+        <p class="balance-label">Balance Total del Mes</p>
+        <h1 class="balance-amount" [class.positive]="extendedBalance.balanceTotal > 0" [class.negative]="extendedBalance.balanceTotal < 0">
+          {{ formatCurrency(extendedBalance.balanceTotal) }}
         </h1>
         <p class="balance-subtitle">{{ getCurrentMonthName() }}</p>
+      </div>
+
+      <!-- Desglose del Balance -->
+      <div class="balance-breakdown-card">
+        <div class="breakdown-header">
+          <h3>
+            <ion-icon name="analytics-outline"></ion-icon>
+            Desglose de tu Dinero
+          </h3>
+          <ion-icon name="information-circle-outline" class="info-icon" (click)="showBalanceInfo()"></ion-icon>
+        </div>
+
+        <div class="breakdown-items">
+          <!-- Balance Disponible -->
+          <div class="breakdown-item available">
+            <div class="breakdown-icon-wrapper available-bg">
+              <ion-icon name="wallet-outline"></ion-icon>
+            </div>
+            <div class="breakdown-content">
+              <p class="breakdown-label">Disponible para Gastar</p>
+              <p class="breakdown-value positive">{{ formatCurrency(extendedBalance.balanceAvailable) }}</p>
+              <p class="breakdown-hint">Dinero libre para usar</p>
+            </div>
+          </div>
+
+          <!-- Balance Ahorrado -->
+          <div class="breakdown-item saved">
+            <div class="breakdown-icon-wrapper saved-bg">
+              <ion-icon name="shield-checkmark-outline"></ion-icon>
+            </div>
+            <div class="breakdown-content">
+              <p class="breakdown-label">Ahorrado en Metas</p>
+              <p class="breakdown-value accent">{{ formatCurrency(extendedBalance.balanceSavedInGoals) }}</p>
+              <p class="breakdown-hint">Comprometido en {{ extendedBalance.activeGoalsCount }} meta(s)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barra Visual de Distribución -->
+        <div class="balance-distribution-bar" *ngIf="extendedBalance.balanceTotal > 0">
+          <div 
+            class="bar-segment available-segment" 
+            [style.width.%]="(extendedBalance.balanceAvailable / extendedBalance.balanceTotal) * 100">
+          </div>
+          <div 
+            class="bar-segment saved-segment" 
+            [style.width.%]="(extendedBalance.balanceSavedInGoals / extendedBalance.balanceTotal) * 100">
+          </div>
+        </div>
+
+        <!-- Leyenda -->
+        <div class="distribution-legend">
+          <div class="legend-item">
+            <span class="legend-dot available-dot"></span>
+            <span class="legend-text">Disponible ({{ getPercentage(extendedBalance.balanceAvailable, extendedBalance.balanceTotal) }}%)</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot saved-dot"></span>
+            <span class="legend-text">Ahorrado ({{ getPercentage(extendedBalance.balanceSavedInGoals, extendedBalance.balanceTotal) }}%)</span>
+          </div>
+        </div>
       </div>
 
       <!-- Income & Expense Cards -->
@@ -48,7 +126,7 @@
             <ion-icon name="trending-up" class="trend-icon success"></ion-icon>
           </div>
           <p class="stat-label">Ingresos</p>
-          <p class="stat-value">{{ formatCurrency(summary.totalIncome) }}</p>
+          <p class="stat-value">{{ formatCurrency(extendedBalance.totalIncome) }}</p>
         </div>
         
         <div class="stat-card expense-card">
@@ -59,7 +137,7 @@
             <ion-icon name="trending-down" class="trend-icon danger"></ion-icon>
           </div>
           <p class="stat-label">Gastos</p>
-          <p class="stat-value">{{ formatCurrency(summary.totalExpense) }}</p>
+          <p class="stat-value">{{ formatCurrency(extendedBalance.totalExpense) }}</p>
         </div>
       </div>
     </div>
@@ -103,7 +181,7 @@
     <!-- Gastos por Categoría -->
     <div class="category-spending-section" *ngIf="summary.byCategory.length > 0">
       <div class="section-header">
-        <h2 class="section-title">Gastos por Categoría</h2>
+        <h2 class="section-title">Ingresos y Gastos por Categoría</h2>
         <a class="view-all-link" (click)="goToTransactions()">Ver Todo</a>
       </div>
 

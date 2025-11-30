@@ -296,8 +296,19 @@ isEditingGoal = false;
   async saveEditedGoal() {
     if (!this.editingGoal) return;
 
+    // Validaciones
+    if (!this.editingGoal.name.trim()) {
+      this.showAlert('Error', 'Por favor ingresa un nombre para la meta');
+      return;
+    }
+    
+    if (this.editingGoal.targetAmount <= 0) {
+      this.showAlert('Error', 'El monto objetivo debe ser mayor a cero');
+      return;
+    }
+
     try {
-      // Llama al servicio para actualizar la meta (asegúrate que updateGoal espera el formato correcto)
+      // Llama al servicio para actualizar la meta
       const updatedGoal = await this.goalService.updateGoal(this.editingGoal.id, {
         name: this.editingGoal.name,
         description: this.editingGoal.description,
@@ -307,19 +318,17 @@ isEditingGoal = false;
         color: this.editingGoal.color,
       });
 
-      // Actualiza la lista local (si tienes una) o recarga metas
-      // Por ejemplo, puedes llamar a un método para refrescar las metas:
-      // this.loadGoals();
-
+      // Mostrar mensaje de éxito
+      this.showAlert('¡Éxito!', 'Meta actualizada correctamente', 'success');
+      
       this.isEditingGoal = false;
       this.editingGoal = null;
 
-      // Opcional: muestra mensaje de éxito
-      console.log('Meta actualizada:', updatedGoal);
+      console.log('✅ Meta actualizada:', updatedGoal);
 
     } catch (error) {
-      console.error('Error al guardar meta editada:', error);
-      // Aquí podrías mostrar un toast o alert con el error
+      console.error('❌ Error al guardar meta editada:', error);
+      this.showAlert('Error', 'No se pudo actualizar la meta');
     }
   }
 
@@ -377,9 +386,14 @@ isEditingGoal = false;
 
   /**
    * Formatea una fecha
+   * Parsea la fecha en zona horaria local para evitar problemas con UTC
    */
   formatDate(dateString: string): string {
-    const date = new Date(dateString);
+    // Parsear la fecha en zona horaria local (no UTC)
+    // Formato esperado: "YYYY-MM-DD"
+    const [year, month, day] = dateString.split('-').map(num => parseInt(num, 10));
+    const date = new Date(year, month - 1, day); // mes es 0-indexed
+    
     return new Intl.DateTimeFormat('es-CO', {
       day: '2-digit',
       month: 'long',

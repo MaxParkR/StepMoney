@@ -53,8 +53,17 @@ export class TransactionsPage implements OnInit, OnDestroy {
   // Categorías filtradas según el tipo seleccionado
   availableCategories: Category[] = [];
   
+  // Nombre personalizado para categorías "Otros"
+  customCategoryName = '';
+  
   // Loading
   isLoading = true;
+  
+  // Estado del modal de edición
+  isEditingTransaction = false;
+  
+  // Transacción que se está editando
+  editingTransaction: Transaction | null = null;
   
   // Subject para destruir suscripciones
   private destroy$ = new Subject<void>();
@@ -129,8 +138,9 @@ export class TransactionsPage implements OnInit, OnDestroy {
     }
     
     // Ordenar por fecha (más reciente primero)
+    // Usar comparación de strings directa ya que el formato YYYY-MM-DD es ordenable
     this.filteredTransactions.sort((a, b) => {
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
+      return b.date.localeCompare(a.date);
     });
   }
 
@@ -169,6 +179,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
       date: new Date().toISOString().split('T')[0],
       description: ''
     };
+    this.customCategoryName = '';
     this.updateAvailableCategories();
   }
 
@@ -197,6 +208,28 @@ export class TransactionsPage implements OnInit, OnDestroy {
   }
 
   /**
+   * Selecciona una categoría
+   */
+  selectCategory(categoryId: string) {
+    this.newTransaction.categoryId = categoryId;
+    
+    // Si no es una categoría "Otros", limpiar el nombre personalizado
+    if (!this.isOtherCategorySelected()) {
+      this.customCategoryName = '';
+    }
+  }
+
+  /**
+   * Verifica si la categoría seleccionada es "Otros Ingresos" u "Otros Gastos"
+   */
+  isOtherCategorySelected(): boolean {
+    // cat-12 = Otros Ingresos
+    // cat-8 = Otros Gastos
+    return this.newTransaction.categoryId === 'cat-12' || 
+           this.newTransaction.categoryId === 'cat-8';
+  }
+
+  /**
    * Guarda la nueva transacción
    */
   async saveTransaction() {
@@ -211,13 +244,86 @@ export class TransactionsPage implements OnInit, OnDestroy {
       return;
     }
 
+    // Validar nombre personalizado si es categoría "Otros"
+    if (this.isOtherCategorySelected() && !this.customCategoryName.trim()) {
+      this.showAlert(
+        'Nombre requerido', 
+        'Por favor especifica el tipo de ' + (this.newTransaction.type === 'income' ? 'ingreso' : 'gasto')
+      );
+      return;
+    }
+
     try {
+      // Si hay nombre personalizado, agregarlo a la descripción
+      if (this.customCategoryName.trim()) {
+        const customLabel = `📌 ${this.customCategoryName.trim()}`;
+        this.newTransaction.description = this.newTransaction.description 
+          ? `${customLabel} - ${this.newTransaction.description}`
+          : customLabel;
+      }
+
       await this.transactionService.createTransaction(this.newTransaction);
       this.showAlert('¡Éxito!', 'Transacción guardada correctamente', 'success');
       this.closeAddTransactionModal();
     } catch (error) {
       console.error('❌ Error al guardar transacción:', error);
       this.showAlert('Error', 'No se pudo guardar la transacción');
+    }
+  }
+
+  /**
+   * Abre el modal para editar una transacción
+   */
+  openEditTransactionModal(transaction: Transaction) {
+    this.editingTransaction = { ...transaction };
+    this.isEditingTransaction = true;
+  }
+
+  /**
+   * Cierra el modal de edición
+   */
+  closeEditTransactionModal() {
+    this.isEditingTransaction = false;
+    this.editingTransaction = null;
+  }
+
+  /**
+   * Obtiene las categorías para editar según el tipo de transacción
+   */
+  getEditCategories(): Category[] {
+    if (!this.editingTransaction) return [];
+    return this.categoryService.getCategoriesByType(this.editingTransaction.type);
+  }
+
+  /**
+   * Guarda los cambios de la transacción editada
+   */
+  async saveEditedTransaction() {
+    if (!this.editingTransaction) return;
+
+    // Validaciones
+    if (!this.editingTransaction.categoryId) {
+      this.showAlert('Error', 'Por favor selecciona una categoría');
+      return;
+    }
+    
+    if (this.editingTransaction.amount <= 0) {
+      this.showAlert('Error', 'El monto debe ser mayor a cero');
+      return;
+    }
+
+    try {
+      await this.transactionService.updateTransaction(this.editingTransaction.id, {
+        amount: this.editingTransaction.amount,
+        categoryId: this.editingTransaction.categoryId,
+        date: this.editingTransaction.date,
+        description: this.editingTransaction.description
+      });
+      this.showAlert('¡Éxito!', 'Transacción actualizada correctamente', 'success');
+      this.closeEditTransactionModal();
+    } catch (error) {
+      console.error('❌ Error al actualizar transacción:', error);
+      this.showAlert('Error', 'No se pudo actualizar la transacción');
     }
   }
 
@@ -266,9 +372,14 @@ export class TransactionsPage implements OnInit, OnDestroy {
 
   /**
    * Formatea una fecha
+   * Parsea la fecha en zona horaria local para evitar problemas con UTC
    */
   formatDate(dateString: string): string {
-    const date = new Date(dateString);
+    // Parsear la fecha en zona horaria local (no UTC)
+    // Formato esperado: "YYYY-MM-DD"
+    const [year, month, day] = dateString.split('-').map(num => parseInt(num, 10));
+    const date = new Date(year, month - 1, day); // mes es 0-indexed
+    
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);

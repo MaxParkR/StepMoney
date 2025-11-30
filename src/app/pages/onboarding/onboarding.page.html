@@ -1,0 +1,289 @@
+<!--
+  Página de Onboarding - StepMoney
+  Diseño con imagen de bienvenida y formulario de perfil
+-->
+
+<ion-content [fullscreen]="true" class="onboarding-content" [scrollY]="true">
+
+  <!-- ==================== PASO 0: BIENVENIDA ==================== -->
+  <div class="step-container" *ngIf="currentStep === 0">
+    
+    <!-- Imagen de fondo superior -->
+    <div class="welcome-header">
+      <img src="assets/Welcome_Screen.png" alt="StepMoney" class="welcome-image">
+      <div class="welcome-overlay"></div>
+    </div>
+
+    <!-- Contenido inferior -->
+    <div class="welcome-content">
+      <div class="welcome-text">
+        <h2>{{ getGreeting() }}</h2>
+        <p>Estás a punto de comenzar tu viaje hacia una mejor salud financiera.</p>
+      </div>
+
+      <div class="features-list">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <ion-icon name="wallet-outline"></ion-icon>
+          </div>
+          <div class="feature-text">
+            <h4>Control Total</h4>
+            <p>Registra ingresos y gastos fácilmente</p>
+          </div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">
+            <ion-icon name="flag-outline"></ion-icon>
+          </div>
+          <div class="feature-text">
+            <h4>Metas de Ahorro</h4>
+            <p>Alcanza tus objetivos paso a paso</p>
+          </div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon">
+            <ion-icon name="bar-chart-outline"></ion-icon>
+          </div>
+          <div class="feature-text">
+            <h4>Reportes Visuales</h4>
+            <p>Entiende tu dinero con gráficos claros</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <ion-button expand="block" (click)="nextStep()" class="btn-primary">
+          Comenzar
+          <ion-icon name="arrow-forward" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PASO 1: INFORMACIÓN BÁSICA ==================== -->
+  <div class="step-container" *ngIf="currentStep === 1">
+    
+    <!-- Header con gradiente -->
+    <div class="step-header">
+      <div class="header-decoration">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+      </div>
+      <div class="header-content">
+        <div class="step-indicator">Paso 1 de 2</div>
+        <h1>Cuéntanos sobre ti</h1>
+        <p>Esta información nos ayudará a personalizar tu experiencia</p>
+      </div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="form-container">
+      
+      <!-- Avatar -->
+      <div class="avatar-section">
+        <div class="avatar-circle">
+          <ion-icon name="person" *ngIf="!userProfile.name"></ion-icon>
+          <span *ngIf="userProfile.name" class="avatar-initial">
+            {{ userProfile.name.charAt(0).toUpperCase() }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Campo: Nombre -->
+      <div class="form-field">
+        <label class="field-label">
+          <ion-icon name="person-outline"></ion-icon>
+          ¿Cómo te llamas? *
+        </label>
+        <input 
+          type="text" 
+          [(ngModel)]="userProfile.name"
+          (ngModelChange)="onNameChange()"
+          placeholder="Tu nombre"
+          class="field-input"
+          maxlength="50">
+        <span class="field-hint" *ngIf="userProfile.name.length < 2 && userProfile.name.length > 0">
+          Ingresa al menos 2 caracteres
+        </span>
+      </div>
+
+      <!-- Campo: Email (opcional) -->
+      <div class="form-field">
+        <label class="field-label">
+          <ion-icon name="mail-outline"></ion-icon>
+          Correo electrónico (opcional)
+        </label>
+        <input 
+          type="email" 
+          [(ngModel)]="userProfile.email"
+          placeholder="tu@email.com"
+          class="field-input">
+      </div>
+
+      <!-- Campo: Moneda -->
+      <div class="form-field">
+        <label class="field-label">
+          <ion-icon name="cash-outline"></ion-icon>
+          Moneda preferida
+        </label>
+        <select [(ngModel)]="userProfile.currency" class="field-select">
+          <option *ngFor="let currency of currencies" [value]="currency.code">
+            {{ currency.symbol }} - {{ currency.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Botones de navegación -->
+      <div class="navigation-buttons">
+        <ion-button fill="outline" (click)="previousStep()" class="btn-back">
+          <ion-icon name="arrow-back" slot="start"></ion-icon>
+          Atrás
+        </ion-button>
+        <ion-button 
+          (click)="nextStep()" 
+          [disabled]="!isStepValid"
+          class="btn-next">
+          Siguiente
+          <ion-icon name="arrow-forward" slot="end"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PASO 2: CONFIGURACIÓN FINANCIERA ==================== -->
+  <div class="step-container" *ngIf="currentStep === 2">
+    
+    <!-- Header con gradiente -->
+    <div class="step-header">
+      <div class="header-decoration">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+      </div>
+      <div class="header-content">
+        <div class="step-indicator">Paso 2 de 2</div>
+        <h1>Tus finanzas</h1>
+        <p>Configura tu punto de partida (puedes cambiarlo después)</p>
+      </div>
+    </div>
+
+    <!-- Formulario -->
+    <div class="form-container">
+      
+      <!-- Saludo personalizado -->
+      <div class="personalized-greeting" *ngIf="userProfile.name">
+        <span class="greeting-emoji">👋</span>
+        <span>¡Hola, <strong>{{ userProfile.name }}</strong>!</span>
+      </div>
+
+      <!-- Campo: Ingreso mensual -->
+      <div class="form-field">
+        <label class="field-label">
+          <ion-icon name="trending-up-outline"></ion-icon>
+          Ingreso mensual aproximado
+        </label>
+        <div class="input-with-prefix">
+          <span class="input-prefix">$</span>
+          <input 
+            type="number" 
+            [(ngModel)]="userProfile.monthlyIncome"
+            placeholder="0"
+            class="field-input with-prefix"
+            inputmode="numeric">
+        </div>
+        <span class="field-hint">Esto nos ayuda a darte mejores recomendaciones</span>
+      </div>
+
+      <!-- Selector de tipo de meta -->
+      <div class="form-field">
+        <label class="field-label">
+          <ion-icon name="flag-outline"></ion-icon>
+          ¿Para qué quieres ahorrar?
+        </label>
+        <div class="goal-selector">
+          <div 
+            *ngFor="let goal of savingsGoals" 
+            class="goal-option"
+            [class.selected]="selectedGoalType === goal.icon"
+            (click)="selectGoalType(goal)">
+            <ion-icon [name]="goal.icon"></ion-icon>
+            <span>{{ goal.label }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campo: Meta de ahorro -->
+      <div class="form-field" *ngIf="selectedGoalType">
+        <label class="field-label">
+          <ion-icon name="wallet-outline"></ion-icon>
+          Monto objetivo
+        </label>
+        <div class="input-with-prefix">
+          <span class="input-prefix">$</span>
+          <input 
+            type="number" 
+            [(ngModel)]="userProfile.savingsGoal"
+            placeholder="0"
+            class="field-input with-prefix"
+            inputmode="numeric">
+        </div>
+      </div>
+
+      <!-- Notificaciones -->
+      <div class="notifications-section">
+        <div class="notification-toggle">
+          <div class="toggle-info">
+            <ion-icon name="notifications-outline"></ion-icon>
+            <div>
+              <h4>Recordatorios diarios</h4>
+              <p>Te recordaremos registrar tus gastos</p>
+            </div>
+          </div>
+          <ion-toggle 
+            [(ngModel)]="userProfile.enableNotifications"
+            color="primary">
+          </ion-toggle>
+        </div>
+
+        <div class="reminder-time" *ngIf="userProfile.enableNotifications">
+          <label class="field-label">
+            <ion-icon name="time-outline"></ion-icon>
+            Hora del recordatorio
+          </label>
+          <input 
+            type="time" 
+            [(ngModel)]="userProfile.reminderTime"
+            class="field-input time-input">
+        </div>
+      </div>
+
+      <!-- Botones de navegación -->
+      <div class="navigation-buttons">
+        <ion-button fill="outline" (click)="previousStep()" class="btn-back">
+          <ion-icon name="arrow-back" slot="start"></ion-icon>
+          Atrás
+        </ion-button>
+        <ion-button (click)="completeOnboarding()" class="btn-finish">
+          <ion-icon name="checkmark-circle" slot="start"></ion-icon>
+          ¡Empezar!
+        </ion-button>
+      </div>
+
+      <!-- Skip option -->
+      <div class="skip-section">
+        <span (click)="skipOnboarding()">Saltar y configurar después</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicador de progreso -->
+  <div class="progress-indicator" *ngIf="currentStep > 0">
+    <div class="progress-dots">
+      <div class="dot" [class.active]="currentStep >= 1" [class.completed]="currentStep > 1"></div>
+      <div class="dot" [class.active]="currentStep >= 2"></div>
+    </div>
+  </div>
+
+</ion-content>
+

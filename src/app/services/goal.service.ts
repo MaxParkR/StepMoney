@@ -178,6 +178,7 @@ export class GoalService {
 
   /**
    * Actualiza una meta existente
+   * Si se aumenta el monto objetivo de una meta completada, la meta vuelve a estar activa
    */
   async updateGoal(id: string, updates: Partial<Goal>): Promise<Goal> {
     try {
@@ -189,6 +190,29 @@ export class GoalService {
       }
 
       const existingGoal = allGoals[index];
+      
+      // Determinar el nuevo targetAmount (usar el actualizado o el existente)
+      const newTargetAmount = updates.targetAmount !== undefined 
+        ? updates.targetAmount 
+        : existingGoal.targetAmount;
+
+      // Verificar si la meta debe volver a estar activa
+      // Si la meta estaba completada pero el nuevo monto objetivo es mayor que el monto actual
+      let newCompleted = existingGoal.completed;
+      let newCompletedAt = existingGoal.completedAt;
+
+      if (existingGoal.completed && newTargetAmount > existingGoal.currentAmount) {
+        // La meta ya no está completada porque se aumentó el objetivo
+        newCompleted = false;
+        newCompletedAt = undefined;
+        console.log(`🔄 Meta "${existingGoal.name}" regresó a activas (nuevo objetivo: ${newTargetAmount})`);
+      } else if (!existingGoal.completed && existingGoal.currentAmount >= newTargetAmount) {
+        // La meta se completó porque se redujo el objetivo
+        newCompleted = true;
+        newCompletedAt = new Date().toISOString();
+        console.log(`🎉 Meta "${existingGoal.name}" se completó (objetivo reducido a: ${newTargetAmount})`);
+      }
+
       const updatedGoal: Goal = {
         ...existingGoal,
         ...updates,
@@ -196,8 +220,8 @@ export class GoalService {
         currentAmount: existingGoal.currentAmount,
         createdAt: existingGoal.createdAt,
         updatedAt: new Date().toISOString(),
-        completed: existingGoal.completed,
-        completedAt: existingGoal.completedAt
+        completed: newCompleted,
+        completedAt: newCompletedAt
       };
 
       allGoals[index] = updatedGoal;
